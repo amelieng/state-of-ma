@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Read(//c/Users/Vanilla/.claude/projects/C--Users-Vanilla-Downloads-State-of-ma-state-of-ma/**)",
-      "Read(//c/Users/Vanilla/.claude/projects/C--Users-Vanilla-Downloads-State-of-ma-state-of-ma/memory/**)"
+      "Read(//c/Users/Vanilla/.claude/projects/C--Users-Vanilla-Downloads-State-of-ma-state-of-ma/memory/**)",
+      "Bash(powershell.exe -NoProfile -Command '$env:PATH = \"C:\\\\Program Files\\\\nodejs;\" + $env:PATH; Set-Location \"C:\\\\Users\\\\Vanilla\\\\Downloads\\\\State-of-ma\\\\state-of-ma\\\\boston-housing-dashboard\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" install' 2>&1)"
     ]
   }
 }

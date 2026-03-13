@@ -1,0 +1,31 @@
+year,nar_median_age_first_time_buyer,ny_fed_avg_age_first_time_buyer,first_time_buyer_share_pct,notes
+1981,28,,44,NAR series begins
+1985,27,,43,
+1987,27,,42,
+1989,28,,41,
+1991,28,,38,
+1993,28,,47,
+1995,32,,37,
+1997,31,,44,
+1999,32,,40,
+2001,31,,40,
+2003,32,,39,
+2005,32,,40,Peak housing boom; first-timer share ~40%
+2007,31,,39,Pre-GFC; first-timer share near historic high
+2009,30,,47,Post-crash surge; federal first-time buyer tax credit
+2010,30,,50,Tax credit extended; highest first-timer share on record
+2011,31,,37,Tax credit expires; share normalizes
+2012,31,,39,
+2013,31,,38,
+2014,31,,33,Share begins long decline
+2015,31,,32,
+2016,32,,35,
+2017,32,,34,
+2018,32,,33,
+2019,33,,33,Pre-COVID baseline
+2020,33,,31,COVID year; transaction volume low
+2021,33,33.5,34,NY Fed CCP data starts; post-COVID buying surge
+2022,36,34.2,26,Mortgage rate shock 3% to 7%; buyers exit market
+2023,35,35.1,32,
+2024,38,36.3,24,NAR all-time high; NY Fed shows more moderate rise
+2025,40,,21,Record high; first-timer share lowest since series began
