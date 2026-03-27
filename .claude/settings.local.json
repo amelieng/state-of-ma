@@ -3,7 +3,13 @@
     "allow": [
       "Read(//c/Users/Vanilla/.claude/projects/C--Users-Vanilla-Downloads-State-of-ma-state-of-ma/**)",
       "Read(//c/Users/Vanilla/.claude/projects/C--Users-Vanilla-Downloads-State-of-ma-state-of-ma/memory/**)",
-      "Bash(powershell.exe -NoProfile -Command '$env:PATH = \"C:\\\\Program Files\\\\nodejs;\" + $env:PATH; Set-Location \"C:\\\\Users\\\\Vanilla\\\\Downloads\\\\State-of-ma\\\\state-of-ma\\\\boston-housing-dashboard\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" install' 2>&1)"
+      "Bash(powershell.exe -NoProfile -Command '$env:PATH = \"C:\\\\Program Files\\\\nodejs;\" + $env:PATH; Set-Location \"C:\\\\Users\\\\Vanilla\\\\Downloads\\\\State-of-ma\\\\state-of-ma\\\\boston-housing-dashboard\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" install' 2>&1)",
+      "Bash(find /c/Users/Vanilla/Downloads/State-of-ma/state-of-ma -type f -name *.html)",
+      "Bash(find /c/Users/Vanilla/Downloads/State-of-ma/state-of-ma -name *nav* -o -name *index*)",
+      "Bash(mkdir -p \"c:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/vizzes\")",
+      "Bash(cp \"c:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/house-that-income-cant-reach.html\" \"c:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/vizzes/boston_homeownership_viz1.html\")",
+      "Bash(cp \"c:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/boston-housing-dashboard/preview.html\" \"c:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/vizzes/boston_permits.html\")",
+      "Bash(grep -E \"\\\\.html$|vizzes|housing\")"
     ]
   }
 }

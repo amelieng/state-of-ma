@@ -1,0 +1,65 @@
+year,occupation,tier,soc_matched,area_matched,annual_wage,monthly_wage,description,source,data_status
+2005,Home Health Aide,red,31-1011,71650,23440,1953,Personal care & home health — lowest-wage essential workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2005,Childcare Worker,red,39-9011,71650,21020,1752,Childcare center and family daycare workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2005,Restaurant / Food Service,red,35-3021,71650,17210,1434,Boston's second-largest employer sector,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2005,Elementary School Teacher,yellow,25-2021,71650,54360,4530,BPS and metro-area public/private elementary teachers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2005,Bus / Transit Driver,yellow,53-3021,71650,28880,2407,MBTA operators and regional transit drivers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2005,Firefighter,yellow,33-2011,71650,45930,3828,Municipal firefighters,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2005,Registered Nurse,yellow,29-1111,71650,66590,5549,Boston's largest sector; wide internal range,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2005,Software Developer,green,15-1031,71650,86420,7202,Shows what still works in today's market,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2009,Home Health Aide,red,31-1011,71650,25940,2162,Personal care & home health — lowest-wage essential workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2009,Childcare Worker,red,39-9011,71650,23370,1948,Childcare center and family daycare workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2009,Restaurant / Food Service,red,35-3021,71650,18950,1579,Boston's second-largest employer sector,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2009,Elementary School Teacher,yellow,25-2021,71650,62620,5218,BPS and metro-area public/private elementary teachers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2009,Bus / Transit Driver,yellow,53-3021,71650,33500,2792,MBTA operators and regional transit drivers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2009,Firefighter,yellow,33-2011,71650,50490,4208,Municipal firefighters,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2009,Registered Nurse,yellow,29-1111,71650,80470,6706,Boston's largest sector; wide internal range,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2009,Software Developer,green,15-1031,71650,100610,8384,Shows what still works in today's market,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2012,Home Health Aide,red,31-1011,71650,26130,2178,Personal care & home health — lowest-wage essential workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2012,Childcare Worker,red,39-9011,71650,25080,2090,Childcare center and family daycare workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2012,Restaurant / Food Service,red,35-3021,71650,19340,1612,Boston's second-largest employer sector,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2012,Elementary School Teacher,yellow,25-2021,71650,66020,5502,BPS and metro-area public/private elementary teachers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2012,Bus / Transit Driver,yellow,53-3021,71650,34930,2911,MBTA operators and regional transit drivers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2012,Firefighter,yellow,33-2011,71650,54610,4551,Municipal firefighters,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2012,Registered Nurse,yellow,29-1141,71650,80850,6738,Boston's largest sector; wide internal range,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2012,Software Developer,green,15-1132,71650,97210,8101,Shows what still works in today's market,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2015,Home Health Aide,red,31-1011,71650,28160,2347,Personal care & home health — lowest-wage essential workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2015,Childcare Worker,red,39-9011,71650,25040,2087,Childcare center and family daycare workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2015,Restaurant / Food Service,red,35-3021,71650,19800,1650,Boston's second-largest employer sector,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2015,Elementary School Teacher,yellow,25-2021,71650,70880,5907,BPS and metro-area public/private elementary teachers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2015,Bus / Transit Driver,yellow,53-3021,71650,46290,3858,MBTA operators and regional transit drivers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2015,Firefighter,yellow,33-2011,71650,59930,4994,Municipal firefighters,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2015,Registered Nurse,yellow,29-1141,71650,86390,7199,Boston's largest sector; wide internal range,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2015,Software Developer,green,15-1132,71650,106130,8844,Shows what still works in today's market,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2019,Home Health Aide,red,31-1120,71650,31330,2611,Personal care & home health — lowest-wage essential workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2019,Childcare Worker,red,39-9011,71650,29520,2460,Childcare center and family daycare workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2019,Restaurant / Food Service,red,35-3023,71650,26210,2184,Boston's second-largest employer sector,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2019,Elementary School Teacher,yellow,25-2021,71650,81990,6832,BPS and metro-area public/private elementary teachers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2019,Bus / Transit Driver,yellow,53-3052,71650,49290,4108,MBTA operators and regional transit drivers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2019,Firefighter,yellow,33-2011,71650,62490,5208,Municipal firefighters,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2019,Registered Nurse,yellow,29-1141,71650,90480,7540,Boston's largest sector; wide internal range,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2019,Software Developer,green,interpolated,,121497,10125,Shows what still works in today's market,"BLS OEWS, Boston-Cambridge-Nashua MSA",estimated (interpolated 2015–2021)
+2021,Home Health Aide,red,31-1120,71650,36300,3025,Personal care & home health — lowest-wage essential workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2021,Childcare Worker,red,39-9011,71650,31130,2594,Childcare center and family daycare workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2021,Restaurant / Food Service,red,35-3023,71650,30390,2532,Boston's second-largest employer sector,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2021,Elementary School Teacher,yellow,25-2021,71650,80200,6683,BPS and metro-area public/private elementary teachers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2021,Bus / Transit Driver,yellow,53-3052,71650,62900,5242,MBTA operators and regional transit drivers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2021,Firefighter,yellow,33-2011,71650,62010,5168,Municipal firefighters,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2021,Registered Nurse,yellow,29-1141,71650,95430,7952,Boston's largest sector; wide internal range,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2021,Software Developer,green,15-1252,71650,129180,10765,Shows what still works in today's market,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2022,Home Health Aide,red,31-1120,71650,34100,2842,Personal care & home health — lowest-wage essential workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2022,Childcare Worker,red,39-9011,71650,38720,3227,Childcare center and family daycare workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2022,Restaurant / Food Service,red,35-3023,71650,33820,2818,Boston's second-largest employer sector,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2022,Elementary School Teacher,yellow,25-2021,71650,80820,6735,BPS and metro-area public/private elementary teachers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2022,Bus / Transit Driver,yellow,53-3052,71650,53070,4422,MBTA operators and regional transit drivers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2022,Firefighter,yellow,33-2011,71650,64510,5376,Municipal firefighters,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2022,Registered Nurse,yellow,29-1141,71650,99750,8312,Boston's largest sector; wide internal range,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2022,Software Developer,green,15-1252,71650,133540,11128,Shows what still works in today's market,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2023,Home Health Aide,red,31-1120,71650,37450,3121,Personal care & home health — lowest-wage essential workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2023,Childcare Worker,red,39-9011,71650,39110,3259,Childcare center and family daycare workers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2023,Restaurant / Food Service,red,35-3023,71650,35230,2936,Boston's second-largest employer sector,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2023,Elementary School Teacher,yellow,25-2021,71650,83950,6996,BPS and metro-area public/private elementary teachers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2023,Bus / Transit Driver,yellow,53-3052,71650,62510,5209,MBTA operators and regional transit drivers,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2023,Firefighter,yellow,33-2011,71650,75040,6253,Municipal firefighters,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2023,Registered Nurse,yellow,29-1141,71650,100360,8363,Boston's largest sector; wide internal range,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
+2023,Software Developer,green,15-1252,71650,139090,11591,Shows what still works in today's market,"BLS OEWS, Boston-Cambridge-Nashua MSA",confirmed
