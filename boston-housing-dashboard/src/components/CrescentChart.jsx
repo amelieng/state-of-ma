@@ -209,7 +209,7 @@ export default function CrescentChart({
   const resetZoom = () => setTransform({ scale: 1, tx: 0, ty: 0 })
 
   return (
-    <>
+    <div style={{ width: '100%', maxWidth: '1160px', margin: '0 auto', boxSizing: 'border-box', padding: '0 48px' }}>
       {/* Legend */}
       <div className="legend" style={{ marginBottom: 12 }}>
         <div className="legend-item">
@@ -497,6 +497,6 @@ export default function CrescentChart({
           </g>
         </svg>
       </div>
-    </>
+    </div>
   )
 }
