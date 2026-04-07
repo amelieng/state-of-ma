@@ -27,14 +27,6 @@ export default function App() {
 
       {/* ── Section 3: Affordability calculator ── */}
       <section className="scroll-section">
-        <div className="section-inner section-inner--heading-only">
-          <h2 className="section-heading">
-            The average Boston salary can no longer afford the average Boston home.
-          </h2>
-          <p className="pre-viz-copy">
-            Using the standard affordability rule — no more than 28% of your monthly income toward a mortgage — see how Boston's median home price stacks up against what residents actually earn. Select an occupation to make it personal.
-          </p>
-        </div>
         <AffordabilityChart />
       </section>
 

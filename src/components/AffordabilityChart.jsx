@@ -138,6 +138,15 @@ export default function AffordabilityChart() {
   const [selectedOccupation, setSelectedOccupation] = useState('median');
   const [selectedHHSize, setSelectedHHSize]         = useState(null);
 
+  // ── Tooltip state ─────────────────────────────────────────────
+  const [tooltip, setTooltip]       = useState(null);
+  const [hoveredBar, setHoveredBar] = useState(null);
+  const barRowRef   = useRef(null);
+  const barOuterRef = useRef(null);
+  const [isFinePointer] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches
+  );
+
   // ── House animation ──────────────────────────────────────────
   const animFrameRef    = useRef(null);
   const currentScaleRef = useRef(null);  // null = not yet initialized
@@ -179,6 +188,22 @@ export default function AffordabilityChart() {
     animFrameRef.current = requestAnimationFrame(tick);
     return () => { if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current); };
   }, [selectedYear, selectedOccupation, selectedHHSize]);
+
+  // ── Click-outside to dismiss tooltip (mobile) ─────────────────
+  useEffect(() => {
+    if (!tooltip) return;
+    function handleOutside(e) {
+      if (barRowRef.current && !barRowRef.current.contains(e.target)) {
+        setTooltip(null);
+      }
+    }
+    document.addEventListener('mousedown', handleOutside);
+    document.addEventListener('touchstart', handleOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('touchstart', handleOutside);
+    };
+  }, [tooltip]);
 
   // ── Derived values for current year + occupation ──────────────
   const BAR_SCALE = 16000;
@@ -223,6 +248,15 @@ export default function AffordabilityChart() {
   const extLabelText  = extLong
     ? `${extMultiplier}× ${extOccLabel} needed · +${fmt(gap_mo)}/mo`
     : `+${fmt(gap_mo)}/mo`;
+  const gap_yr_rounded = over ? Math.round(gap_mo * 12 / 1000) * 1000 : 0;
+
+  function openTooltip(which, anchorEl) {
+    const elRect       = anchorEl.getBoundingClientRect();
+    const containerRect = barRowRef.current.getBoundingClientRect();
+    const centerX = elRect.left + elRect.width / 2 - containerRect.left;
+    const flip    = elRect.top < 100;
+    setTooltip({ which, x: centerX, flip });
+  }
 
   // Stage header
   const TIER_COLORS = { median: '#6B6560', red: '#8B4A4A', yellow: '#8a5c0a', green: '#2d6b2d' };
@@ -855,13 +889,11 @@ export default function AffordabilityChart() {
     <div className="affordability-chart" style={S.page}>
 
       {/* ── Page header ── */}
-      <p style={S.lead}>
-        A household earning Boston's median income would need to nearly double it — to $179K — just
-        to qualify for a mortgage on a median-priced home today.
-      </p>
-      <p style={S.contextNote}>
-        Lenders typically require housing costs to stay under 28% of gross monthly income — the
-        threshold used throughout this visualization to define affordability.
+      <h2 style={{ fontFamily: "'Oswald', sans-serif", fontSize: '36px', fontWeight: 500, letterSpacing: '-0.4px', lineHeight: 1.15, color: '#1C1916', marginBottom: '12px' }}>
+        The average Boston salary can no longer afford the average Boston home.
+      </h2>
+      <p style={{ fontFamily: "'Lato', sans-serif", fontSize: '16px', color: '#6B6460', lineHeight: 1, marginBottom: '28px' }}>
+        See where you land. Select an occupation or household size below.
       </p>
 
       {/* ── Stage card ── */}
@@ -1083,12 +1115,178 @@ export default function AffordabilityChart() {
 
       {/* ── Income bar ── */}
       <div style={S.barSection}>
-        <div style={S.barRow}>
-          <div style={{ ...S.barOuter, width: `${iW}px`, ...(hasExt ? {} : { borderRadius: '3px', borderRight: '2px solid #6B6560' }) }}>
-            <div style={{ ...S.barStripe, width: '28%' }} />
+
+        {/* barRow is position:relative — tooltip is absolute inside it */}
+        <div ref={barRowRef} style={S.barRow}>
+
+          {/* ── Tooltip ── */}
+          {tooltip && (() => {
+            const TW = 220;
+            const containerW = barRowRef.current
+              ? barRowRef.current.getBoundingClientRect().width
+              : BAR_PX;
+            const rawLeft = tooltip.x - TW / 2;
+            const leftPx  = Math.max(0, Math.min(rawLeft, containerW - TW));
+            const caretLeft = Math.max(10, Math.min(tooltip.x - leftPx, TW - 16));
+            return (
+              <div style={{
+                position: 'absolute',
+                left: `${leftPx}px`,
+                ...(tooltip.flip
+                  ? { top: 'calc(100% + 8px)' }
+                  : { bottom: 'calc(100% + 8px)' }),
+                width: `${TW}px`,
+                background: '#1C1916',
+                color: '#F7F6F3',
+                fontFamily: "'Lato', sans-serif",
+                fontSize: '14px',
+                lineHeight: 1.6,
+                padding: '0.75rem 1rem',
+                borderRadius: '4px',
+                pointerEvents: 'none',
+                zIndex: 10,
+                boxSizing: 'border-box',
+              }}>
+                {tooltip.which === 'income' && (<>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '11px', color: '#8B6F47', lineHeight: 1.4 }}>annual income</div>
+                  <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: '18px', color: '#F7F6F3', lineHeight: 1.2 }}>{fmt(income)}</div>
+                  <div style={{ fontSize: '13px', color: '#C4BDB8' }}>({fmt(mo_inc)} / month gross)</div>
+                </>)}
+                {tooltip.which === 'limit' && (<>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '11px', color: '#8B6F47', lineHeight: 1.4 }}>affordability limit · 28% rule</div>
+                  <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: '18px', color: '#F7F6F3', lineHeight: 1.2 }}>{fmt(afford)} / month</div>
+                  <div style={{ fontSize: '13px', color: '#C4BDB8' }}>maximum monthly housing cost</div>
+                </>)}
+                {tooltip.which === 'mortgage' && (<>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '11px', color: '#8B6F47', lineHeight: 1.4 }}>monthly mortgage</div>
+                  <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: '18px', color: '#F7F6F3', lineHeight: 1.2 }}>{fmt(mo_mtg)} / month</div>
+                  <div style={{ fontSize: '13px', color: '#C4BDB8' }}>30-yr fixed · median Boston home</div>
+                  <div style={{ fontSize: '13px', color: over ? '#F5C4B3' : '#9FE1CB', marginTop: '2px' }}>
+                    {over ? 'not affordable for this income' : 'affordable for this income'}
+                  </div>
+                  {over && (
+                    <div style={{ fontSize: '13px', color: '#C4BDB8', marginTop: '2px' }}>
+                      need {fmt(gap_yr_rounded)} more/yr to qualify
+                    </div>
+                  )}
+                </>)}
+                {/* Caret triangle */}
+                <div style={{
+                  position: 'absolute',
+                  [tooltip.flip ? 'top' : 'bottom']: '-6px',
+                  left: `${caretLeft}px`,
+                  width: 0, height: 0,
+                  borderLeft: '6px solid transparent',
+                  borderRight: '6px solid transparent',
+                  ...(tooltip.flip
+                    ? { borderBottom: '6px solid #1C1916' }
+                    : { borderTop: '6px solid #1C1916' }),
+                }} />
+              </div>
+            );
+          })()}
+
+          {/* Income bar */}
+          <div
+            ref={barOuterRef}
+            style={{
+              ...S.barOuter,
+              width: `${iW}px`,
+              ...(hasExt ? {} : { borderRadius: '3px', borderRight: '2px solid #6B6560' }),
+              cursor: 'pointer',
+              transition: 'filter 0.15s ease',
+              filter: hoveredBar ? 'brightness(1.08)' : undefined,
+            }}
+            role="button"
+            tabIndex="0"
+            aria-label={`Annual income: ${fmt(income)}, ${fmt(mo_inc)} per month`}
+            onMouseEnter={(e) => {
+              if (!isFinePointer) return;
+              setHoveredBar('income');
+              openTooltip('income', e.currentTarget);
+            }}
+            onMouseLeave={() => {
+              if (!isFinePointer) return;
+              setHoveredBar(null);
+              setTooltip(null);
+            }}
+            onClick={(e) => {
+              if (isFinePointer) return;
+              if (tooltip?.which === 'income') { setTooltip(null); } else { openTooltip('income', e.currentTarget); }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openTooltip('income', e.currentTarget); }
+            }}
+          >
+            {/* Affordability limit stripe — interactive */}
+            <div
+              style={{ ...S.barStripe, width: '28%', cursor: 'pointer' }}
+              role="button"
+              tabIndex="0"
+              aria-label={`Affordability limit: ${fmt(afford)} per month — 28% of income`}
+              onMouseEnter={(e) => {
+                if (!isFinePointer) return;
+                setHoveredBar('limit');
+                openTooltip('limit', e.currentTarget);
+              }}
+              onMouseLeave={() => {
+                if (!isFinePointer) return;
+                setHoveredBar('income');
+                openTooltip('income', barOuterRef.current);
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (isFinePointer) return;
+                if (tooltip?.which === 'limit') { setTooltip(null); } else { openTooltip('limit', e.currentTarget); }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); openTooltip('limit', e.currentTarget); }
+              }}
+            />
             {over && <div style={{ ...S.barRed, left: '28%', width: `${redW}%` }} />}
-            {over && <div style={{ ...S.barMtg, left: `${Math.min(parseFloat(mtgPct), 99.5)}%` }} />}
+            {/* Mortgage marker — 20px hit target wrapping 2px visual line */}
+            {over && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '-4px', bottom: '-4px',
+                  width: '20px',
+                  left: `calc(${Math.min(parseFloat(mtgPct), 99.5)}% - 10px)`,
+                  cursor: 'pointer',
+                  zIndex: 3,
+                  display: 'flex',
+                  alignItems: 'stretch',
+                  justifyContent: 'center',
+                  transition: 'filter 0.15s ease',
+                  filter: hoveredBar === 'mortgage' ? 'brightness(1.5)' : undefined,
+                }}
+                role="button"
+                tabIndex="0"
+                aria-label={`Monthly mortgage: ${fmt(mo_mtg)}. Not affordable — ${fmt(mo_mtg - afford)} above the limit.`}
+                onMouseEnter={(e) => {
+                  if (!isFinePointer) return;
+                  setHoveredBar('mortgage');
+                  openTooltip('mortgage', e.currentTarget);
+                }}
+                onMouseLeave={() => {
+                  if (!isFinePointer) return;
+                  setHoveredBar('income');
+                  openTooltip('income', barOuterRef.current);
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (isFinePointer) return;
+                  if (tooltip?.which === 'mortgage') { setTooltip(null); } else { openTooltip('mortgage', e.currentTarget); }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); openTooltip('mortgage', e.currentTarget); }
+                }}
+              >
+                <div style={{ width: '2px', background: 'rgba(139,74,74,0.70)', borderRadius: '1px', alignSelf: 'stretch' }} />
+              </div>
+            )}
           </div>
+
           {hasExt && (
             <div style={{ ...S.barExtension, width: `${extW}px` }}>
               <span style={extLong
@@ -1100,6 +1298,7 @@ export default function AffordabilityChart() {
             </div>
           )}
         </div>
+
         <div style={S.barAnnRow}>
           <span style={S.annIncome}>Income: ${Math.round(income / 1000)}K / yr ({fmt(mo_inc)}/mo)</span>
           <span style={S.annAfford}>Limit: {fmt(afford)}/mo</span>
@@ -1134,6 +1333,24 @@ export default function AffordabilityChart() {
           <div style={S.msDelta} />
         </div>
       </div>
+
+      {/* ── $179K callout — default state only ── */}
+      {selectedOccupation === 'median' && selectedHHSize === null && (
+        <div style={{
+          marginTop: '20px',
+          background: '#F0EDE8',
+          borderLeft: '2px solid #8B4A4A',
+          padding: '0.75rem 1rem',
+          fontFamily: "'Lato', sans-serif",
+          fontSize: '14px',
+          color: '#4a3f38',
+          lineHeight: 1.6,
+          borderRadius: '0 4px 4px 0',
+          maxWidth: '620px',
+        }}>
+          A household earning Boston's median income would need to nearly double it — to $179K — just to qualify for a mortgage on a median-priced home today.
+        </div>
+      )}
 
           </div>{/* /stageMain */}
 
