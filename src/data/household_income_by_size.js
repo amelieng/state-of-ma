@@ -32,7 +32,7 @@ export const householdSizeOptions = [
     income: 36581,
     targetHomePrice: 499000,
     bedroomContext: 'studio or 1BR',
-    priceNote: 'est. based on Greater Boston median condo, 2023',
+    priceNote: 'est. derived proportionally from Warren Group 2-bedroom median ($599,000), 2023',
   },
   {
     id: 'size2',
@@ -50,7 +50,7 @@ export const householdSizeOptions = [
     income: 130740,
     targetHomePrice: 749000,
     bedroomContext: '2BR',
-    priceNote: 'est. based on Greater Boston median condo, 2023',
+    priceNote: 'est. derived proportionally from Warren Group 2-bedroom median ($599,000), 2023',
   },
   {
     id: 'size4',
@@ -59,7 +59,7 @@ export const householdSizeOptions = [
     income: 121570,
     targetHomePrice: 899000,
     bedroomContext: '3BR',
-    priceNote: 'est. based on Greater Boston median condo, 2023',
+    priceNote: 'est. derived proportionally from Warren Group 2-bedroom median ($599,000), 2023',
   },
   {
     id: 'size5',
@@ -68,6 +68,6 @@ export const householdSizeOptions = [
     income: 144746,
     targetHomePrice: 1050000,
     bedroomContext: '3BR+',
-    priceNote: 'est. based on Greater Boston median condo, 2023',
+    priceNote: 'est. derived proportionally from Warren Group 2-bedroom median ($599,000), 2023',
   },
 ];

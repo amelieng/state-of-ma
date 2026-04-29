@@ -12,9 +12,216 @@ const { permitData, demandData, demandByYear } = loadData()
 export default function App() {
   const [showDemand, setShowDemand] = useState(true)
   const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, content: null })
+  const [feedbackOpen, setFeedbackOpen] = useState(false)
+  const [feedbackType, setFeedbackType] = useState('')
+  const [feedbackDesc, setFeedbackDesc] = useState('')
+  const [feedbackEmail, setFeedbackEmail] = useState('')
+
+  function closeFeedback() {
+    setFeedbackOpen(false)
+    setFeedbackType('')
+    setFeedbackDesc('')
+    setFeedbackEmail('')
+  }
 
   return (
     <div>
+
+      {/* ── Feedback tab ── */}
+      <button
+        onClick={() => setFeedbackOpen(true)}
+        style={{
+          position: 'fixed',
+          top: 0,
+          right: '24px',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          padding: '8px 14px',
+          background: '#FFFFFF',
+          border: '1px solid var(--border)',
+          borderTop: 'none',
+          borderRadius: '0 0 6px 6px',
+          fontFamily: 'var(--font-data)',
+          fontSize: '11px',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          color: 'var(--text-secondary)',
+          cursor: 'pointer',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+          transition: 'background 0.15s ease, color 0.15s ease',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'var(--bg)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+      >
+        Feedback
+      </button>
+
+      {/* ── Feedback modal ── */}
+      {feedbackOpen && (
+        <>
+          {/* Overlay */}
+          <div
+            onClick={closeFeedback}
+            style={{
+              position: 'fixed', inset: 0,
+              background: 'rgba(0,0,0,0.45)',
+              zIndex: 1001,
+            }}
+          />
+
+          {/* Panel */}
+          <div style={{
+            position: 'fixed',
+            top: 0, right: 0, bottom: 0,
+            width: '360px',
+            background: '#FFFFFF',
+            borderLeft: '1px solid var(--border)',
+            zIndex: 1002,
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '32px 28px',
+            gap: '20px',
+            overflowY: 'auto',
+          }}>
+
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <p style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: '18px',
+                  fontWeight: '600',
+                  color: 'var(--text-primary)',
+                  marginBottom: '6px',
+                }}>Feedback Form</p>
+                <p style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '13px',
+                  color: 'var(--text-secondary)',
+                  lineHeight: '1.5',
+                }}>Got suggestions, questions, or concerns? Let us know!</p>
+              </div>
+              <button
+                onClick={closeFeedback}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  fontSize: '18px', color: 'var(--text-muted)', lineHeight: 1,
+                  padding: '2px 4px',
+                }}
+              >×</button>
+            </div>
+
+            {/* Type dropdown */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={{
+                fontFamily: 'var(--font-data)',
+                fontSize: '11px',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: 'var(--text-secondary)',
+              }}>Type</label>
+              <select
+                value={feedbackType}
+                onChange={e => setFeedbackType(e.target.value)}
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14px',
+                  color: feedbackType ? 'var(--text-primary)' : 'var(--text-muted)',
+                  background: 'var(--bg)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '5px',
+                  padding: '9px 12px',
+                  appearance: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                <option value="" disabled>Select a type…</option>
+                <option value="bug">Bug</option>
+                <option value="general">General feedback</option>
+                <option value="compliment">Compliment</option>
+              </select>
+            </div>
+
+            {/* Description */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={{
+                fontFamily: 'var(--font-data)',
+                fontSize: '11px',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: 'var(--text-secondary)',
+              }}>Description</label>
+              <textarea
+                value={feedbackDesc}
+                onChange={e => setFeedbackDesc(e.target.value)}
+                placeholder="Tell us more…"
+                rows={5}
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14px',
+                  color: 'var(--text-primary)',
+                  background: 'var(--bg)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '5px',
+                  padding: '9px 12px',
+                  resize: 'vertical',
+                  lineHeight: '1.5',
+                }}
+              />
+            </div>
+
+            {/* Email */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={{
+                fontFamily: 'var(--font-data)',
+                fontSize: '11px',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: 'var(--text-secondary)',
+              }}>Email <span style={{ textTransform: 'none', letterSpacing: 0, color: 'var(--text-muted)', fontSize: '11px' }}>(optional)</span></label>
+              <input
+                type="email"
+                value={feedbackEmail}
+                onChange={e => setFeedbackEmail(e.target.value)}
+                placeholder="you@example.com"
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14px',
+                  color: 'var(--text-primary)',
+                  background: 'var(--bg)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '5px',
+                  padding: '9px 12px',
+                }}
+              />
+            </div>
+
+            {/* Submit */}
+            <a
+              href={`mailto:housing@goinvo.com,amelie@goinvo.com?subject=Feedback (${feedbackType || 'general'})&body=${encodeURIComponent(feedbackDesc)}${feedbackEmail ? encodeURIComponent('\n\nFrom: ' + feedbackEmail) : ''}`}
+              onClick={closeFeedback}
+              style={{
+                marginTop: '4px',
+                display: 'block',
+                textAlign: 'center',
+                padding: '10px',
+                background: 'var(--text-primary)',
+                color: '#FFFFFF',
+                fontFamily: 'var(--font-data)',
+                fontSize: '11px',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >Send</a>
+
+          </div>
+        </>
+      )}
+
 
       {/* ── Section 1: Renter / homeowner ratio ── */}
       <section className="scroll-section">
@@ -37,9 +244,6 @@ export default function App() {
           <h2 className="section-heading">
             Boston has been under-building for 40 years.
           </h2>
-          <p className="section-subhead">
-            It's not that no one saw this coming. It's that not enough was built anyway.
-          </p>
           <p className="pre-viz-copy">
             Each shape is one year of permitted housing. Its size encodes total units built; its hollow core encodes single-family units as absence. The orange trace is how many new homes Boston actually needed. When shapes fall below that line, the city fell behind.
           </p>
@@ -58,6 +262,97 @@ export default function App() {
 
       {/* ── Section 5: Conclusion ── */}
       <Conclusion />
+
+      {/* ── Authors + Sources ── */}
+      <footer style={{
+        borderTop: '1px solid var(--border)',
+        marginTop: '64px',
+        paddingTop: '32px',
+        paddingBottom: '64px',
+        maxWidth: '720px',
+        margin: '64px auto 0',
+      }}>
+
+        {/* Authors */}
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <p style={{
+            fontFamily: 'var(--font-data)',
+            fontSize: '11px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'var(--text-muted)',
+            marginBottom: '12px',
+          }}>Authors</p>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '32px',
+            fontFamily: 'var(--font-body)',
+            fontSize: '15px',
+            color: 'var(--text-secondary)',
+          }}>
+            <span>Amelie Eng</span>
+            <span>Juhan Sonin</span>
+            <span>Chloe Ma</span>
+          </div>
+        </div>
+
+        {/* Sources */}
+        <div>
+          <p style={{
+            fontFamily: 'var(--font-data)',
+            fontSize: '11px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'var(--text-muted)',
+            marginBottom: '16px',
+            textAlign: 'center',
+          }}>References</p>
+          <ol style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '13px',
+            color: 'var(--text-secondary)',
+            lineHeight: '1.7',
+            paddingLeft: '18px',
+            marginBottom: '28px',
+          }}>
+            <li>NAR Profile of Home Buyers and Sellers, 2024–2025 — first-time buyer age trends (1981–2025), national data</li>
+            <li>Redfin Data Center, 2012–2024 — Boston home price data</li>
+            <li>PropertyShark / MAR, 2005–2011 — historical Boston home price data</li>
+            <li>U.S. Census ACS 1-year, Table B19013 — median household income</li>
+            <li>U.S. Census ACS 1-year, Table B19019 — household income by household size</li>
+            <li>U.S. Census ACS 2016–2020 5-year estimates — housing conditions</li>
+            <li>U.S. Census Bureau, Building Permits Survey — annual permit data</li>
+            <li>ACS Table B11001 (Household Type) — household formation / demand estimates</li>
+            <li>Freddie Mac PMMS 30-year fixed (Primary Mortgage Market Survey) — mortgage rate data</li>
+            <li>BLS OEWS (Occupational Employment and Wage Statistics) — occupation wage data</li>
+            <li>Warren Group — Greater Boston median condo sale price, 2023</li>
+            <li>Boston Mayor's Office of Housing, 2022 Housing Conditions Report — renter/homeowner ratio</li>
+          </ol>
+
+          <p style={{
+            fontFamily: 'var(--font-data)',
+            fontSize: '11px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'var(--text-muted)',
+            marginBottom: '10px',
+          }}>Methodology</p>
+          <ul style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '13px',
+            color: 'var(--text-secondary)',
+            lineHeight: '1.7',
+            paddingLeft: '18px',
+          }}>
+            <li>20% down payment assumed for all mortgage calculations</li>
+            <li>1-person household income derived as median 2-person income × 0.67 (proxy — not directly in source data)</li>
+            <li>2024 household demand estimated</li>
+            <li>BLS wage data interpolated for some years</li>
+          </ul>
+        </div>
+
+      </footer>
 
     </div>
   )

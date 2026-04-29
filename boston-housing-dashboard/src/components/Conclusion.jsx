@@ -325,25 +325,10 @@ export default function Conclusion() {
 
         </div>
 
-        {/* ── PART 3: ASYMMETRY NOTE ── */}
-        <div className="conc-asymmetry">
-          The typical first-time buyer is now 40. In 1992 they were 28. Ten years of equity, delayed. That shortage
-          was debated in public hearings and in legislative chambers. Most of those seats were empty.
-        </div>
-
         {/* ── PART 4: DECISION MAP ── */}
         <hr className="div" />
 
         <p className="conc-eyebrow">who runs those hearings</p>
-
-        <div className="conc-map-legend">
-          {LEGEND_DOTS.map(d => (
-            <div key={d.label} className="conc-map-legend-item">
-              <div className="conc-map-dot" style={{ background: d.color }} />
-              {d.label}
-            </div>
-          ))}
-        </div>
 
         <div className="conc-map-grid">
           {DECISION_CARDS.map((card, idx) => (
@@ -385,6 +370,15 @@ export default function Conclusion() {
                   </a>
                 </div>
               </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="conc-map-legend" style={{ justifyContent: 'center' }}>
+          {LEGEND_DOTS.map(d => (
+            <div key={d.label} className="conc-map-legend-item">
+              <div className="conc-map-dot" style={{ background: d.color }} />
+              {d.label}
             </div>
           ))}
         </div>

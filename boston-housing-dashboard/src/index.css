@@ -763,8 +763,8 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
 }
 
 .ftb-hero-card--now {
-  background: #2a1616;
-  border-color: #8B4A4A;
+  background: #0e1c28;
+  border-color: #3B6B8A;
 }
 
 .ftb-hero-era {
@@ -777,7 +777,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
 }
 
 .ftb-hero-card--now .ftb-hero-era {
-  color: var(--text-source);
+  color: var(--text-on-dark);
 }
 
 .ftb-hero-yr {
@@ -789,7 +789,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
 }
 
 .ftb-hero-card--now .ftb-hero-yr {
-  color: var(--text-source);
+  color: var(--text-on-dark);
 }
 
 .ftb-hero-age {
@@ -802,7 +802,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
 }
 
 .ftb-hero-card--now .ftb-hero-age {
-  color: #8B4A4A;
+  color: #6ab4d8;
 }
 
 .ftb-hero-age-lbl {
@@ -813,7 +813,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
 }
 
 .ftb-hero-card--now .ftb-hero-age-lbl {
-  color: var(--text-source);
+  color: var(--text-on-dark);
 }
 
 .ftb-hero-share {
@@ -823,7 +823,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
 }
 
 .ftb-hero-card--now .ftb-hero-share {
-  color: var(--text-source);
+  color: var(--text-on-dark);
 }
 
 .ftb-then-now-arrow {

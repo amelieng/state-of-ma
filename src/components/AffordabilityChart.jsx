@@ -455,7 +455,7 @@ export default function AffordabilityChart() {
     },
     // ── Bar section ──
     barSection: {
-      marginTop: '8px',
+      marginTop: '32px',
       width: '620px',
       overflow: 'visible',
     },
@@ -489,6 +489,7 @@ export default function AffordabilityChart() {
       position: 'absolute',
       top: 0, bottom: 0,
       background: 'rgba(139,74,74,0.18)',
+      transition: 'width 0.35s ease',
     },
     barMtg: {
       position: 'absolute',
@@ -506,6 +507,7 @@ export default function AffordabilityChart() {
       position: 'relative',
       flexShrink: 0,
       overflow: 'visible',
+      transition: 'width 0.35s ease',
     },
     extLabelAbove: {
       position: 'absolute',
@@ -616,7 +618,8 @@ export default function AffordabilityChart() {
       textTransform: 'uppercase',
       letterSpacing: '0.1em',
       color: '#A09C97',
-      whiteSpace: 'nowrap',
+      whiteSpace: 'normal',
+      wordBreak: 'break-word',
     },
     sidebarPills: {
       display: 'flex',
@@ -631,7 +634,8 @@ export default function AffordabilityChart() {
       color: '#A09C97',
       marginTop: '6px',
       marginBottom: '2px',
-      whiteSpace: 'nowrap',
+      whiteSpace: 'normal',
+      wordBreak: 'break-word',
       flexShrink: 0,
     },
     sidebarDivider: {
@@ -702,8 +706,10 @@ export default function AffordabilityChart() {
     },
     // ── Timeline ──
     timelineWrap: {
-      padding: '24px 40px 28px',
+      padding: '20px 40px 28px',
       overflow: 'visible',
+      borderTop: '1px solid #E2DDD6',
+      marginTop: '20px',
     },
     timelineLabel: {
       fontFamily: "'Lato', sans-serif",
@@ -734,9 +740,10 @@ export default function AffordabilityChart() {
       left: 0,
       top: '50%',
       height: '2px',
-      background: '#3B6B8A',
+      background: '#B8CEDD',
       transform: 'translateY(-50%)',
       borderRadius: '1px',
+      transition: 'width 0.35s ease',
     },
     tlDots: {
       position: 'relative',
@@ -746,8 +753,8 @@ export default function AffordabilityChart() {
       alignItems: 'center',
     },
     tlDot: {
-      width: '20px',
-      height: '20px',
+      width: '15px',
+      height: '15px',
       borderRadius: '50%',
       background: '#FFFFFF',
       border: '2px solid #E2DDD6',
@@ -757,22 +764,22 @@ export default function AffordabilityChart() {
       flexShrink: 0,
     },
     tlDotPast: {
-      width: '20px',
-      height: '20px',
+      width: '15px',
+      height: '15px',
       borderRadius: '50%',
-      background: '#3B6B8A',
-      border: '2px solid #3B6B8A',
+      background: '#B8CEDD',
+      border: '2px solid #B8CEDD',
       cursor: 'pointer',
       position: 'relative',
       zIndex: 2,
       flexShrink: 0,
     },
     tlDotActive: {
-      width: '20px',
-      height: '20px',
+      width: '15px',
+      height: '15px',
       borderRadius: '50%',
-      background: '#3B6B8A',
-      border: '2px solid #3B6B8A',
+      background: '#8AAFC6',
+      border: '2px solid #8AAFC6',
       cursor: 'pointer',
       position: 'relative',
       zIndex: 2,
@@ -781,7 +788,7 @@ export default function AffordabilityChart() {
     },
     tlDotLabel: {
       position: 'absolute',
-      top: '26px',
+      top: '21px',
       left: '50%',
       transform: 'translateX(-50%)',
       fontFamily: "'Lato', sans-serif",
@@ -792,7 +799,7 @@ export default function AffordabilityChart() {
     },
     tlDotLabelPast: {
       position: 'absolute',
-      top: '26px',
+      top: '21px',
       left: '50%',
       transform: 'translateX(-50%)',
       fontFamily: "'Lato', sans-serif",
@@ -803,7 +810,7 @@ export default function AffordabilityChart() {
     },
     tlDotLabelActive: {
       position: 'absolute',
-      top: '26px',
+      top: '21px',
       left: '50%',
       transform: 'translateX(-50%)',
       fontFamily: "'Lato', sans-serif",
@@ -1147,6 +1154,14 @@ export default function AffordabilityChart() {
 
       {/* ── Income bar ── */}
       <div style={S.barSection}>
+        <p style={{
+          fontFamily: "'DM Mono', monospace",
+          fontSize: '11px',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          color: '#A09C97',
+          marginBottom: '6px',
+        }}>Affordability Ruler</p>
 
         {/* barRow is position:relative — tooltip is absolute inside it */}
         <div ref={barRowRef} style={S.barRow}>
@@ -1226,7 +1241,7 @@ export default function AffordabilityChart() {
               width: `${iW}px`,
               ...(hasExt ? {} : { borderRadius: '3px', borderRight: '2px solid #6B6560' }),
               cursor: 'pointer',
-              transition: 'filter 0.15s ease',
+              transition: 'width 0.35s ease, filter 0.15s ease',
               filter: hoveredBar ? 'brightness(1.08)' : undefined,
             }}
             role="button"

@@ -1,4 +1,9 @@
-// Source: NAR Profile of Home Buyers and Sellers, 2024–2025
+// Source: NAR Profile of Home Buyers and Sellers, various years
+// 2025 median age (40) and 2024 median age (38): NAR 2025 and 2024 reports
+// 1981–2022 data points: NAR historical trend data — verify each pair
+// against individual annual reports before publishing
+// NOTE: 1981/29 is unverified — consider replacing with 1992/28
+// (sourced) as the historical comparison anchor
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 // Pre-computed SVG coordinates for the age trend line
@@ -65,7 +70,7 @@ export default function FirstTimeBuyer() {
           <p className="ftb-hero-yr">1981</p>
           <div className="ftb-hero-age">29</div>
           <p className="ftb-hero-age-lbl">median age at first purchase</p>
-          <p className="ftb-hero-share">40% of all first-time buyers</p>
+
         </div>
 
         <div className="ftb-then-now-arrow" aria-hidden="true">→</div>
@@ -75,9 +80,6 @@ export default function FirstTimeBuyer() {
           <p className="ftb-hero-yr">2025</p>
           <div className="ftb-hero-age">40</div>
           <p className="ftb-hero-age-lbl">median age at first purchase</p>
-          <p className="ftb-hero-share">In 1992, the typical first-time buyer was 28. Today they're 40.</p>
-          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', color: 'var(--text-source)', marginTop: '8px', lineHeight: '1.5' }}>A 12-year delay — in a single generation.</p>
-          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', color: 'var(--text-source)', opacity: 0.65, marginTop: '6px', lineHeight: '1.4' }}>NAR Profile of Home Buyers and Sellers, 2025 · National data</p>
         </div>
 
       </div>
@@ -102,33 +104,6 @@ export default function FirstTimeBuyer() {
 
           {/* X-axis baseline */}
           <line x1={44} y1={206} x2={480} y2={206} stroke="#E2DDD6" strokeWidth="1" />
-
-          {/* Reference line: age 29 — 1981 baseline (solid subtle) */}
-          <line
-            x1={44} y1={193} x2={480} y2={193}
-            stroke="#C4BDB8" strokeWidth="1.5" opacity="0.75"
-          />
-          {/* Label sits between the data curve and the reference line */}
-          <text
-            x={200} y={189}
-            textAnchor="middle"
-            fontFamily="Lato, sans-serif" fontSize="13" fill="#6B6460"
-          >
-            1981 baseline
-          </text>
-
-          {/* Reference line: age 30 — typical parents' purchase age (dashed) */}
-          <line
-            x1={44} y1={179} x2={480} y2={179}
-            stroke="#C4BDB8" strokeWidth="1" strokeDasharray="4,3" opacity="0.7"
-          />
-          <text
-            x={280} y={174}
-            textAnchor="middle"
-            fontFamily="Lato, sans-serif" fontSize="13" fill="#6B6460"
-          >
-            typical parents' purchase age
-          </text>
 
           {/* Y-axis labels */}
           {Y_TICKS.map(t => (
@@ -164,6 +139,10 @@ export default function FirstTimeBuyer() {
             strokeLinecap="round"
           />
 
+          {/* Halos for highlighted points */}
+          <circle cx={44} cy={193} r={10} fill="rgba(139,74,74,0.07)" stroke="#C4A8A8" strokeWidth="1" />
+          <circle cx={480} cy={47} r={10} fill="rgba(139,74,74,0.07)" stroke="#C4A8A8" strokeWidth="1" />
+
           {/* Data point dots */}
           {CHART_POINTS.map(p => (
             <circle
@@ -173,15 +152,19 @@ export default function FirstTimeBuyer() {
             />
           ))}
 
-          {/* Endpoint label: "40 today" */}
-          <text
-            x={476} y={38}
-            textAnchor="end"
-            fontFamily="'Oswald', sans-serif" fontSize="13" fontWeight="500"
-            fill="#8B4A4A"
-          >
-            40 today
-          </text>
+          {/* Label connectors */}
+          <line x1={50} y1={182} x2={44} y2={193} stroke="#C4A8A8" strokeWidth="1" opacity="0.5" />
+          <line x1={460} y1={43} x2={480} y2={47} stroke="#C4A8A8" strokeWidth="1" opacity="0.5" />
+
+          {/* Label box: 1981 */}
+          <rect x={50} y={152} width={60} height={30} rx={2} fill="#F7F6F3" stroke="#D8CECE" strokeWidth="1" />
+          <text x={80} y={165} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="12" fontWeight="600" fill="#8B7070">29 y/o</text>
+          <text x={80} y={177} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="9" fill="#A09090">1981</text>
+
+          {/* Label box: 2025 */}
+          <rect x={430} y={13} width={60} height={30} rx={2} fill="#F7F6F3" stroke="#D8CECE" strokeWidth="1" />
+          <text x={460} y={26} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="12" fontWeight="600" fill="#8B7070">40 y/o</text>
+          <text x={460} y={38} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="9" fill="#A09090">2025</text>
 
         </svg>
       </div>
