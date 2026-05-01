@@ -81,7 +81,7 @@ function buildBuildings(container) {
   renterCol.appendChild(renterPct)
 
   const vs = document.createElement('div')
-  vs.style.cssText = "font-family: 'DM Mono', monospace; font-size: 11px; color: #6B6460; align-self: center; padding-bottom: 48px;"
+  vs.style.cssText = "font-family: 'Lato', sans-serif; font-weight: 400; font-size: 11px; letter-spacing: 0.08em; color: #6B6460; align-self: center; padding-bottom: 48px;"
   vs.textContent = 'vs'
 
   const ownerCol = document.createElement('div')

@@ -407,6 +407,7 @@ export default function AffordabilityChart() {
     msLbl: {
       fontFamily: "'Lato', sans-serif",
       fontSize: '13px',
+      fontWeight: 400,
       textTransform: 'uppercase',
       letterSpacing: '0.07em',
       color: '#A09C97',
@@ -415,13 +416,13 @@ export default function AffordabilityChart() {
     },
     msVal: {
       fontSize: '18px',
-      fontWeight: 400,
+      fontWeight: 700,
       color: '#1C1916',
       lineHeight: 1.1,
     },
     msValRed: {
       fontSize: '18px',
-      fontWeight: 500,
+      fontWeight: 700,
       color: '#8B4A4A',
       lineHeight: 1.1,
     },
@@ -521,7 +522,7 @@ export default function AffordabilityChart() {
     },
     barAnnRow: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(4, 1fr)',
+      gridTemplateColumns: 'repeat(3, 1fr)',
       width: '620px',
       marginTop: '6px',
       fontFamily: "'Lato', sans-serif",
@@ -627,8 +628,9 @@ export default function AffordabilityChart() {
       gap: '2px',
     },
     sidebarEyebrow: {
-      fontFamily: "'DM Mono', monospace",
+      fontFamily: "'Lato', sans-serif",
       fontSize: '13px',
+      fontWeight: 400,
       letterSpacing: '0.1em',
       textTransform: 'uppercase',
       color: '#A09C97',
@@ -842,8 +844,9 @@ export default function AffordabilityChart() {
     },
     // ── Household size price annotation ──
     priceAnnotation: {
-      fontFamily: "'DM Mono', monospace",
+      fontFamily: "'Lato', sans-serif",
       fontSize: '13px',
+      fontWeight: 400,
       color: '#8B6F47',
       marginTop: '3px',
       lineHeight: 1.5,
@@ -888,7 +891,7 @@ export default function AffordabilityChart() {
 
       {/* ── Page header ── */}
       <p className="ftb-portrait-eyebrow">The price of staying in Boston</p>
-      <h2 style={{ fontFamily: "'Oswald', sans-serif", fontSize: '36px', fontWeight: 500, letterSpacing: '-0.4px', lineHeight: 1.15, color: '#1C1916', marginBottom: '12px' }}>
+      <h2 className="section-heading">
         The average Boston salary can no longer afford the average Boston home.
       </h2>
       <p style={{ fontFamily: "'Lato', sans-serif", fontSize: '16px', color: '#6B6460', lineHeight: 1, marginBottom: '28px' }}>
@@ -983,11 +986,11 @@ export default function AffordabilityChart() {
       {/* ── Stage header ── */}
       <div style={{ marginBottom: '10px', minHeight: '160px' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
-          <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: '36px', fontWeight: 400, letterSpacing: '-0.4px', lineHeight: 1, color: TIER_COLORS[stageTier] }}>
+          <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '36px', fontWeight: 700, letterSpacing: '-0.4px', lineHeight: 1, color: TIER_COLORS[stageTier] }}>
             {stageLabel}
           </div>
-          <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: '36px', fontWeight: 300, color: '#E2DDD6', lineHeight: 1 }}>·</div>
-          <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: '36px', fontWeight: 400, letterSpacing: '-0.4px', lineHeight: 1, color: over ? '#8B4A4A' : '#1C1916' }}>
+          <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '36px', fontWeight: 400, color: '#E2DDD6', lineHeight: 1 }}>·</div>
+          <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '36px', fontWeight: 700, letterSpacing: '-0.4px', lineHeight: 1, color: over ? '#8B4A4A' : '#1C1916' }}>
             {selectedYear}
           </div>
         </div>
@@ -1156,8 +1159,9 @@ export default function AffordabilityChart() {
       {/* ── Income bar ── */}
       <div style={S.barSection}>
         <p style={{
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'Lato', sans-serif",
           fontSize: '11px',
+          fontWeight: 400,
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
           color: '#A09C97',
@@ -1196,18 +1200,18 @@ export default function AffordabilityChart() {
                 boxSizing: 'border-box',
               }}>
                 {tooltip.which === 'income' && (<>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '13px', color: '#8B6F47', lineHeight: 1.4 }}>annual income</div>
-                  <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: '18px', color: '#F7F6F3', lineHeight: 1.2 }}>{fmt(income)}</div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 400, color: '#8B6F47', lineHeight: 1.4 }}>annual income</div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2 }}>{fmt(income)}</div>
                   <div style={{ fontSize: '13px', color: '#C4BDB8' }}>({fmt(mo_inc)} / month gross)</div>
                 </>)}
                 {tooltip.which === 'limit' && (<>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '13px', color: '#8B6F47', lineHeight: 1.4 }}>affordability limit · 28% rule</div>
-                  <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: '18px', color: '#F7F6F3', lineHeight: 1.2 }}>{fmt(afford)} / month</div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 400, color: '#8B6F47', lineHeight: 1.4 }}>affordability limit · 28% rule</div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2 }}>{fmt(afford)} / month</div>
                   <div style={{ fontSize: '13px', color: '#C4BDB8' }}>maximum monthly housing cost</div>
                 </>)}
                 {tooltip.which === 'mortgage' && (<>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '13px', color: '#8B6F47', lineHeight: 1.4 }}>monthly mortgage</div>
-                  <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: '18px', color: '#F7F6F3', lineHeight: 1.2 }}>{fmt(mo_mtg)} / month</div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 400, color: '#8B6F47', lineHeight: 1.4 }}>monthly mortgage</div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2 }}>{fmt(mo_mtg)} / month</div>
                   <div style={{ fontSize: '13px', color: '#C4BDB8' }}>30-yr fixed · median Boston home</div>
                   <div style={{ fontSize: '13px', color: over ? '#F5C4B3' : '#9FE1CB', marginTop: '2px' }}>
                     {over ? 'not affordable for this income' : 'affordable for this income'}
@@ -1217,6 +1221,14 @@ export default function AffordabilityChart() {
                       need {fmt(gap_yr_rounded)} more/yr to qualify
                     </div>
                   )}
+                </>)}
+                {tooltip.which === 'extension' && (<>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 400, color: '#8B6F47', lineHeight: 1.4 }}>out of reach</div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2 }}>+{fmt(gap_mo)} / month</div>
+                  <div style={{ fontSize: '13px', color: '#C4BDB8' }}>additional income needed to qualify</div>
+                  <div style={{ fontSize: '13px', color: '#C4BDB8', marginTop: '2px' }}>
+                    {extMultiplier}× {extOccLabel} required · {fmt(needed_yr)}/yr
+                  </div>
                 </>)}
                 {/* Caret triangle */}
                 <div style={{
@@ -1291,7 +1303,28 @@ export default function AffordabilityChart() {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); openTooltip('limit', e.currentTarget); }
               }}
             />
-            {over && <div style={{ ...S.barRed, left: '28%', width: `${redW}%` }} />}
+            {over && (
+              <div
+                style={{ ...S.barRed, left: '28%', width: `${redW}%`, cursor: 'pointer', zIndex: 2 }}
+                onMouseEnter={(e) => {
+                  if (!isFinePointer) return;
+                  e.stopPropagation();
+                  setHoveredBar('mortgage');
+                  openTooltip('mortgage', e.currentTarget);
+                }}
+                onMouseLeave={(e) => {
+                  if (!isFinePointer) return;
+                  e.stopPropagation();
+                  setHoveredBar('income');
+                  openTooltip('income', barOuterRef.current);
+                }}
+                onClick={(e) => {
+                  if (isFinePointer) return;
+                  e.stopPropagation();
+                  if (tooltip?.which === 'mortgage') { setTooltip(null); } else { openTooltip('mortgage', e.currentTarget); }
+                }}
+              />
+            )}
             {/* Mortgage marker — 20px hit target wrapping 2px visual line */}
             {over && (
               <div
@@ -1336,7 +1369,29 @@ export default function AffordabilityChart() {
           </div>
 
           {hasExt && (
-            <div style={{ ...S.barExtension, width: `${extW}px` }}>
+            <div
+              style={{ ...S.barExtension, width: `${extW}px`, cursor: 'pointer' }}
+              role="button"
+              tabIndex="0"
+              aria-label={`Out of reach: ${fmt(gap_mo)} more per month needed — ${extMultiplier}× ${extOccLabel} required`}
+              onMouseEnter={(e) => {
+                if (!isFinePointer) return;
+                setHoveredBar('extension');
+                openTooltip('extension', e.currentTarget);
+              }}
+              onMouseLeave={() => {
+                if (!isFinePointer) return;
+                setHoveredBar(null);
+                setTooltip(null);
+              }}
+              onClick={(e) => {
+                if (isFinePointer) return;
+                if (tooltip?.which === 'extension') { setTooltip(null); } else { openTooltip('extension', e.currentTarget); }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openTooltip('extension', e.currentTarget); }
+              }}
+            >
               <span style={extLong
                 ? { position: 'absolute', top: '50%', left: '8px', transform: 'translateY(-50%)', fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 500, color: 'rgba(160,100,20,0.85)', whiteSpace: 'nowrap', pointerEvents: 'none' }
                 : S.extLabelAbove
@@ -1354,7 +1409,6 @@ export default function AffordabilityChart() {
             ? <span style={S.annOver}>+{fmt(mo_mtg - afford)} over limit</span>
             : <span style={S.annAfford} />
           }
-          <span style={S.annMortgage}>Mortgage: {fmt(mo_mtg)}/mo</span>
         </div>
       </div>
 

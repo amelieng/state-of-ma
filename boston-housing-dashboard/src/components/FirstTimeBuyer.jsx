@@ -87,7 +87,7 @@ export default function FirstTimeBuyer() {
 
       {/* ── Part 2: Age trend line chart ── */}
       <div className="ftb-chart-outer">
-        <p className="ftb-chart-eyebrow" style={{ fontFamily: "'Oswald', sans-serif", fontSize: '16px', color: '#1C1916' }}>Median first-time buyer age · NAR, 1981–2025</p>
+        <p className="ftb-chart-eyebrow">Median first-time buyer age · NAR, 1981–2025</p>
         <svg
           viewBox="0 0 520 250"
           width="100%"
@@ -159,12 +159,12 @@ export default function FirstTimeBuyer() {
 
           {/* Label box: 1981 */}
           <rect x={50} y={152} width={50} height={24} rx={2} fill="#F7F6F3" stroke="#D8CECE" strokeWidth="1" />
-          <text x={75} y={163} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="10" fontWeight="600" fill="#8B7070">29 y/o</text>
+          <text x={75} y={163} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="10" fontWeight="700" fill="#8B7070">29 y/o</text>
           <text x={75} y={173} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="8" fill="#A09090">1981</text>
 
           {/* Label box: 2025 */}
           <rect x={435} y={13} width={50} height={24} rx={2} fill="#F7F6F3" stroke="#D8CECE" strokeWidth="1" />
-          <text x={460} y={24} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="10" fontWeight="600" fill="#8B7070">40 y/o</text>
+          <text x={460} y={24} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="10" fontWeight="700" fill="#8B7070">40 y/o</text>
           <text x={460} y={34} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="8" fill="#A09090">2025</text>
 
         </svg>

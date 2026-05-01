@@ -1,4 +1,9 @@
 import { useState } from 'react'
+import emailjs from '@emailjs/browser'
+
+const EMAILJS_SERVICE_ID  = 'BHT Feedback Submission'
+const EMAILJS_TEMPLATE_ID = 'bht_feedback_submission'
+const EMAILJS_PUBLIC_KEY  = 'F6H3ocyTZ0pcAF_m9'
 import { loadData } from './utils/parseData'
 import Tooltip from './components/Tooltip'
 import AffordabilityChart from './components/AffordabilityChart'
@@ -16,12 +21,34 @@ export default function App() {
   const [feedbackType, setFeedbackType] = useState('')
   const [feedbackDesc, setFeedbackDesc] = useState('')
   const [feedbackEmail, setFeedbackEmail] = useState('')
+  const [feedbackStatus, setFeedbackStatus] = useState(null) // null | 'sending' | 'sent' | 'error'
 
   function closeFeedback() {
     setFeedbackOpen(false)
     setFeedbackType('')
     setFeedbackDesc('')
     setFeedbackEmail('')
+    setFeedbackStatus(null)
+  }
+
+  async function submitFeedback() {
+    if (!feedbackDesc.trim()) return
+    setFeedbackStatus('sending')
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          feedback_type: feedbackType || 'general',
+          message:       feedbackDesc,
+          reply_to:      feedbackEmail || '(not provided)',
+        },
+        EMAILJS_PUBLIC_KEY,
+      )
+      setFeedbackStatus('sent')
+    } catch {
+      setFeedbackStatus('error')
+    }
   }
 
   return (
@@ -198,25 +225,59 @@ export default function App() {
             </div>
 
             {/* Submit */}
-            <a
-              href={`mailto:housing@goinvo.com,amelie@goinvo.com?subject=Feedback (${feedbackType || 'general'})&body=${encodeURIComponent(feedbackDesc)}${feedbackEmail ? encodeURIComponent('\n\nFrom: ' + feedbackEmail) : ''}`}
-              onClick={closeFeedback}
-              style={{
+            {feedbackStatus === 'sent' ? (
+              <div style={{
                 marginTop: '4px',
-                display: 'block',
-                textAlign: 'center',
                 padding: '10px',
-                background: 'var(--text-primary)',
-                color: '#FFFFFF',
+                background: 'rgba(74,124,116,0.10)',
+                border: '1px solid rgba(74,124,116,0.32)',
+                borderRadius: '5px',
                 fontFamily: 'var(--font-data)',
                 fontSize: '11px',
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
-                textDecoration: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-              }}
-            >Send</a>
+                color: '#4A7C74',
+                textAlign: 'center',
+              }}>
+                Sent — thank you!
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={submitFeedback}
+                  disabled={feedbackStatus === 'sending' || !feedbackDesc.trim()}
+                  style={{
+                    marginTop: '4px',
+                    display: 'block',
+                    width: '100%',
+                    textAlign: 'center',
+                    padding: '10px',
+                    background: feedbackStatus === 'sending' || !feedbackDesc.trim() ? 'var(--text-muted)' : 'var(--text-primary)',
+                    color: '#FFFFFF',
+                    fontFamily: 'var(--font-data)',
+                    fontSize: '11px',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    border: 'none',
+                    borderRadius: '5px',
+                    cursor: feedbackStatus === 'sending' || !feedbackDesc.trim() ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {feedbackStatus === 'sending' ? 'Sending…' : 'Send'}
+                </button>
+                {feedbackStatus === 'error' && (
+                  <p style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '13px',
+                    color: '#8B4A4A',
+                    textAlign: 'center',
+                    marginTop: '6px',
+                  }}>
+                    Something went wrong — please try again.
+                  </p>
+                )}
+              </>
+            )}
 
           </div>
         </>

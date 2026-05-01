@@ -111,7 +111,7 @@ export default function SupplyGapChart() {
             legend: { display: false },
             tooltip: {
               backgroundColor: 'rgba(28,25,22,0.92)',
-              titleFont: { family: 'Oswald', size: 13 },
+              titleFont: { family: 'Lato', size: 13, weight: '700' },
               bodyFont: { family: 'Lato', size: 12 },
               footerFont: { family: 'Lato', size: 12 },
               footerColor: 'rgba(255,255,255,0.75)',
@@ -136,7 +136,7 @@ export default function SupplyGapChart() {
             x: {
               grid: { display: false },
               ticks: {
-                font: { family: 'DM Mono', size: 11 },
+                font: { family: 'Lato', size: 11, weight: '400' },
                 color: '#6B6560',
                 maxRotation: 45,
               },
@@ -147,11 +147,11 @@ export default function SupplyGapChart() {
               title: {
                 display: true,
                 text: 'UNITS / YEAR',
-                font: { family: 'DM Mono', size: 10 },
+                font: { family: 'Lato', size: 10, weight: '400' },
                 color: '#A09C97',
               },
               ticks: {
-                font: { family: 'DM Mono', size: 11 },
+                font: { family: 'Lato', size: 11, weight: '400' },
                 color: '#6B6560',
                 callback: val => val.toLocaleString(),
               },
@@ -204,7 +204,7 @@ export default function SupplyGapChart() {
       <h2 style={{
         fontFamily: 'var(--font-heading)',
         fontSize: '28px',
-        fontWeight: 500,
+        fontWeight: 700,
         letterSpacing: '-0.3px',
         lineHeight: 1.2,
         color: 'var(--text-primary)',
@@ -310,6 +310,8 @@ export default function SupplyGapChart() {
         <p style={{
           fontFamily: 'var(--font-body)',
           fontSize: '0.75rem',
+          fontWeight: 300,
+          fontStyle: 'italic',
           color: '#A09C97',
           marginTop: '12px',
           lineHeight: 1.5,
@@ -331,7 +333,7 @@ export default function SupplyGapChart() {
         <p style={{
           fontFamily: 'var(--font-heading)',
           fontSize: '16px',
-          fontWeight: 500,
+          fontWeight: 700,
           color: 'var(--text-primary)',
           marginBottom: '16px',
           lineHeight: 1.3,
@@ -355,7 +357,7 @@ export default function SupplyGapChart() {
                   <div style={{
                     fontFamily: 'var(--font-heading)',
                     fontSize: '14px',
-                    fontWeight: 500,
+                    fontWeight: 700,
                     color: 'var(--text-primary)',
                     lineHeight: 1.2,
                   }}>
