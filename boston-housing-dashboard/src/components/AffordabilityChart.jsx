@@ -887,6 +887,7 @@ export default function AffordabilityChart() {
     <div className="affordability-chart" style={S.page}>
 
       {/* ── Page header ── */}
+      <p className="ftb-portrait-eyebrow">The price of staying in Boston</p>
       <h2 style={{ fontFamily: "'Oswald', sans-serif", fontSize: '36px', fontWeight: 500, letterSpacing: '-0.4px', lineHeight: 1.15, color: '#1C1916', marginBottom: '12px' }}>
         The average Boston salary can no longer afford the average Boston home.
       </h2>

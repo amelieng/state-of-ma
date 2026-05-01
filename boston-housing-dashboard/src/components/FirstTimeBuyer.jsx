@@ -54,6 +54,7 @@ export default function FirstTimeBuyer() {
     <div className="ftb-wrap">
 
       {/* ── Section heading ── */}
+      <p className="ftb-portrait-eyebrow">The wait to own · 1992 vs. today</p>
       <h2 className="section-heading">
         Your parents' generation bought a house. Their kids are still waiting.
       </h2>
@@ -111,7 +112,7 @@ export default function FirstTimeBuyer() {
               key={t.age}
               x={40} y={t.y + 3}
               textAnchor="end"
-              fontFamily="Lato, sans-serif" fontSize="13" fill="#6B6460"
+              fontFamily="Lato, sans-serif" fontSize="11" fill="#6B6460"
             >
               {t.age}
             </text>
@@ -123,7 +124,7 @@ export default function FirstTimeBuyer() {
               key={t.year}
               x={t.x} y={222}
               textAnchor="middle"
-              fontFamily="Lato, sans-serif" fontSize="13" fill="#6B6460"
+              fontFamily="Lato, sans-serif" fontSize="11" fill="#6B6460"
             >
               {t.year}
             </text>
@@ -153,18 +154,18 @@ export default function FirstTimeBuyer() {
           ))}
 
           {/* Label connectors */}
-          <line x1={50} y1={182} x2={44} y2={193} stroke="#C4A8A8" strokeWidth="1" opacity="0.5" />
-          <line x1={460} y1={43} x2={480} y2={47} stroke="#C4A8A8" strokeWidth="1" opacity="0.5" />
+          <line x1={50} y1={176} x2={44} y2={193} stroke="#C4A8A8" strokeWidth="1" opacity="0.5" />
+          <line x1={460} y1={37} x2={480} y2={47} stroke="#C4A8A8" strokeWidth="1" opacity="0.5" />
 
           {/* Label box: 1981 */}
-          <rect x={50} y={152} width={60} height={30} rx={2} fill="#F7F6F3" stroke="#D8CECE" strokeWidth="1" />
-          <text x={80} y={165} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="12" fontWeight="600" fill="#8B7070">29 y/o</text>
-          <text x={80} y={177} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="9" fill="#A09090">1981</text>
+          <rect x={50} y={152} width={50} height={24} rx={2} fill="#F7F6F3" stroke="#D8CECE" strokeWidth="1" />
+          <text x={75} y={163} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="10" fontWeight="600" fill="#8B7070">29 y/o</text>
+          <text x={75} y={173} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="8" fill="#A09090">1981</text>
 
           {/* Label box: 2025 */}
-          <rect x={430} y={13} width={60} height={30} rx={2} fill="#F7F6F3" stroke="#D8CECE" strokeWidth="1" />
-          <text x={460} y={26} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="12" fontWeight="600" fill="#8B7070">40 y/o</text>
-          <text x={460} y={38} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="9" fill="#A09090">2025</text>
+          <rect x={435} y={13} width={50} height={24} rx={2} fill="#F7F6F3" stroke="#D8CECE" strokeWidth="1" />
+          <text x={460} y={24} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="10" fontWeight="600" fill="#8B7070">40 y/o</text>
+          <text x={460} y={34} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="8" fill="#A09090">2025</text>
 
         </svg>
       </div>

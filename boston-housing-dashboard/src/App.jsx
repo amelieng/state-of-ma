@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { loadData } from './utils/parseData'
-import CrescentChart from './components/CrescentChart'
 import Tooltip from './components/Tooltip'
-import AffordabilityChart from '../../src/components/AffordabilityChart'
+import AffordabilityChart from './components/AffordabilityChart'
 import RenterGuess from './components/RenterGuess'
 import FirstTimeBuyer from './components/FirstTimeBuyer'
 import Conclusion from './components/Conclusion'
+import SupplyGapChart from './components/SupplyGapChart'
 
 const { permitData, demandData, demandByYear } = loadData()
 
@@ -238,27 +238,10 @@ export default function App() {
         <AffordabilityChart />
       </section>
 
-      {/* ── Section 4: Crescent supply/demand chart ── */}
+      {/* ── Section 4: Supply gap ── */}
       <section className="scroll-section">
-        <div className="section-inner section-inner--heading-only">
-          <h2 className="section-heading">
-            Boston has been under-building for 40 years.
-          </h2>
-          <p className="pre-viz-copy">
-            Each shape is one year of permitted housing. Its size encodes total units built; its hollow core encodes single-family units as absence. The orange trace is how many new homes Boston actually needed. When shapes fall below that line, the city fell behind.
-          </p>
-        </div>
-        <CrescentChart
-          permitData={permitData}
-          demandData={demandData}
-          demandByYear={demandByYear}
-          showDemand={showDemand}
-          onToggleDemand={() => setShowDemand(v => !v)}
-          onTooltip={setTooltip}
-        />
+        <SupplyGapChart />
       </section>
-
-      <Tooltip {...tooltip} />
 
       {/* ── Section 5: Conclusion ── */}
       <Conclusion />
@@ -349,6 +332,8 @@ export default function App() {
             <li>1-person household income derived as median 2-person income × 0.67 (proxy — not directly in source data)</li>
             <li>2024 household demand estimated</li>
             <li>BLS wage data interpolated for some years</li>
+            <li>Stepped demand baseline (supply gap chart): The "estimated true need" line is a constructed estimate, not a single published figure. It combines annual household formation (~2,500/yr, from ACS B11001) and an estimated backlog absorption rate that rises over time as cumulative underproduction compounds. Tiers: ~3,000/yr (1997–2001), ~4,000/yr (2002–2014), ~5,000/yr (2015–2024). The 2015 step-up is grounded in regional housing targets from EOHLC and the Metro Mayors Coalition; earlier tiers are proportional estimates derived from the Pioneer Institute's job-to-permit ratio finding and the known gap years in permit data. This estimate will be revised if Boston-specific backlog figures become available from a primary source.</li>
+            <li>Gap years in permit data: Years with no MA DHCD permit records (1985–1989, 1991, 1993–1996, 2005, 2008–2011) are excluded from supply totals and chart calculations. They are not treated as zero-permit years.</li>
           </ul>
         </div>
 

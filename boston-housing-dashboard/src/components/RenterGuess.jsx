@@ -200,7 +200,6 @@ export default function RenterGuess() {
           pointerEvents: submitted ? 'none' : 'auto',
         }}
       >
-        <p className="rg-guess-label">renters for every 1 homeowner</p>
         <div className="rg-bubble-controls">
           <button
             className="rg-bubble-btn"
@@ -219,6 +218,7 @@ export default function RenterGuess() {
             ▲
           </button>
         </div>
+        <p className="rg-guess-label">renters for every 1 homeowner</p>
         <button
           className="rg-submit-btn"
           onClick={handleSubmit}

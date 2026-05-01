@@ -103,14 +103,8 @@ export default function Conclusion() {
           This is how Boston's housing got here. Here's how it changes.
         </h2>
         <p className="conc-body">
-          The under-building you just saw wasn't accidental. It was the result of decisions made at public
-          hearings — and the voices in those rooms have not historically been the ones asking for more housing.
-        </p>
-        <p className="conc-eyebrow" style={{ marginTop: '2rem' }}>
-          how you engage depends on where you are
-        </p>
-        <p className="conc-subhead">
-          Two ways to push for more housing. Both matter. Pick the one that fits.
+          If you rent or are looking to buy, or if you already own a home — there are two ways to push for more
+          housing in Boston. Both matter. Pick the one that fits.
         </p>
 
         {/* ── PART 2: THE FORK ── */}
