@@ -333,7 +333,7 @@ export default function AffordabilityChart() {
     page: {
       maxWidth: '1160px',
       margin: '0 auto',
-      padding: '64px 48px 96px',
+      padding: '56px 48px 56px',
       fontFamily: "'Lato', sans-serif",
       background: '#F7F6F3',
       color: '#1C1916',
@@ -369,11 +369,9 @@ export default function AffordabilityChart() {
     },
     inlineLegend: {
       display: 'flex',
-      flexWrap: 'wrap',
-      gap: '14px',
-      marginBottom: '4px',
-      paddingBottom: '12px',
-      borderBottom: '1px solid #E2DDD6',
+      flexWrap: 'nowrap',
+      justifyContent: 'space-between',
+      marginBottom: '14px',
     },
     ilItem: {
       display: 'flex',
@@ -398,11 +396,15 @@ export default function AffordabilityChart() {
     },
     msFirst: {
       paddingRight: '16px',
+      display: 'flex',
+      flexDirection: 'column',
     },
     msRest: {
       paddingLeft: '16px',
       paddingRight: '16px',
       borderLeft: '1px solid #E2DDD6',
+      display: 'flex',
+      flexDirection: 'column',
     },
     msLbl: {
       fontFamily: "'Lato', sans-serif",
@@ -413,15 +415,16 @@ export default function AffordabilityChart() {
       color: '#A09C97',
       marginBottom: '3px',
       lineHeight: 1.3,
+      flex: 1,
     },
     msVal: {
-      fontSize: '18px',
+      fontSize: '24px',
       fontWeight: 700,
       color: '#1C1916',
       lineHeight: 1.1,
     },
     msValRed: {
-      fontSize: '18px',
+      fontSize: '24px',
       fontWeight: 700,
       color: '#8B4A4A',
       lineHeight: 1.1,
@@ -831,12 +834,13 @@ export default function AffordabilityChart() {
     tlBtn: {
       fontFamily: "'Lato', sans-serif",
       fontSize: '13px',
+      fontWeight: 600,
       letterSpacing: '0.06em',
-      color: '#6B6560',
-      background: 'transparent',
-      border: '1px solid #E2DDD6',
-      borderRadius: '5px',
-      padding: '7px 20px',
+      color: '#F7F6F3',
+      background: '#3B6B8A',
+      border: 'none',
+      borderRadius: '6px',
+      padding: '9px 22px',
       cursor: 'pointer',
       display: 'flex',
       alignItems: 'center',
@@ -844,10 +848,10 @@ export default function AffordabilityChart() {
     },
     // ── Household size price annotation ──
     priceAnnotation: {
-      fontFamily: "'Lato', sans-serif",
+      fontFamily: 'var(--font-data)',
       fontSize: '13px',
       fontWeight: 400,
-      color: '#8B6F47',
+      color: 'var(--warm)',
       marginTop: '3px',
       lineHeight: 1.5,
     },
@@ -875,14 +879,14 @@ export default function AffordabilityChart() {
       width: 'fit-content',
     },
     landmarkBest: {
-      background: 'rgba(74,124,116,0.12)',
-      border: '1px solid rgba(74,124,116,0.32)',
-      color: '#4A7C74',
+      background: 'rgba(59,107,138,0.10)',
+      border: '1px solid rgba(59,107,138,0.32)',
+      color: '#3B6B8A',
     },
     landmarkWorst: {
-      background: 'rgba(139,74,74,0.10)',
-      border: '1px solid rgba(139,74,74,0.28)',
-      color: '#8B4A4A',
+      background: 'rgba(59,107,138,0.10)',
+      border: '1px solid rgba(59,107,138,0.32)',
+      color: '#3B6B8A',
     },
   };
 
@@ -895,7 +899,7 @@ export default function AffordabilityChart() {
         The average Boston salary can no longer afford the average Boston home.
       </h2>
       <p style={{ fontFamily: "'Lato', sans-serif", fontSize: '16px', color: '#6B6460', lineHeight: 1, marginBottom: '28px' }}>
-        See where you land. Select an occupation or household size below.
+        Select an occupation or household size below to see how close or far homeownership really is.
       </p>
 
       {/* ── Stage card ── */}
@@ -1016,30 +1020,6 @@ export default function AffordabilityChart() {
         )}
       </div>
 
-      {/* ── Inline legend ── */}
-      <div style={S.inlineLegend}>
-        <div style={S.ilItem}>
-          <div style={{ ...S.ilSwatchBase, background: '#EDE9E3', border: '1px solid #E2DDD6' }} />
-          <span>Monthly income</span>
-        </div>
-        <div style={S.ilItem}>
-          <div style={{
-            ...S.ilSwatchBase,
-            background: 'repeating-linear-gradient(-45deg, rgba(59,107,138,0.22) 0px, rgba(59,107,138,0.22) 2px, transparent 2px, transparent 6px)',
-            border: '1px solid rgba(59,107,138,0.35)',
-          }} />
-          <span>28% affordability limit</span>
-        </div>
-        <div style={S.ilItem}>
-          <div style={{ ...S.ilSwatchBase, background: 'rgba(139,74,74,0.18)', border: '1px solid rgba(139,74,74,0.4)' }} />
-          <span>Mortgage over limit</span>
-        </div>
-        <div style={S.ilItem}>
-          <div style={{ ...S.ilSwatchBase, background: 'rgba(180,120,40,0.12)', border: '1.5px dashed rgba(180,120,40,0.55)' }} />
-          <span>Additional income needed</span>
-        </div>
-      </div>
-
       {/* ── Mini stats strip ── */}
       <div style={S.miniStats}>
         <div style={S.msFirst}>
@@ -1147,7 +1127,7 @@ export default function AffordabilityChart() {
       {/* ── Target home price (household size lens only) ── */}
       {hhLens && hhSizeOpt && (
         <div style={{ marginBottom: '8px', marginTop: '-8px' }}>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '13px', fontWeight: 500, color: '#1C1916', letterSpacing: '-0.2px', lineHeight: 1.2 }}>
+          <div style={{ fontFamily: 'var(--font-data)', fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.2 }}>
             Target home: {fmt(activePrice)}
           </div>
           <div style={S.priceAnnotation}>
@@ -1167,6 +1147,30 @@ export default function AffordabilityChart() {
           color: '#A09C97',
           marginBottom: '6px',
         }}>Affordability Ruler</p>
+
+        {/* ── Inline legend ── */}
+        <div style={S.inlineLegend}>
+          <div style={S.ilItem}>
+            <div style={{ ...S.ilSwatchBase, background: '#EDE9E3', border: '1px solid #E2DDD6' }} />
+            <span>Monthly income</span>
+          </div>
+          <div style={S.ilItem}>
+            <div style={{
+              ...S.ilSwatchBase,
+              background: 'repeating-linear-gradient(-45deg, rgba(59,107,138,0.22) 0px, rgba(59,107,138,0.22) 2px, transparent 2px, transparent 6px)',
+              border: '1px solid rgba(59,107,138,0.35)',
+            }} />
+            <span>28% affordability limit</span>
+          </div>
+          <div style={S.ilItem}>
+            <div style={{ ...S.ilSwatchBase, background: 'rgba(139,74,74,0.18)', border: '1px solid rgba(139,74,74,0.4)' }} />
+            <span>Mortgage over limit</span>
+          </div>
+          <div style={S.ilItem}>
+            <div style={{ ...S.ilSwatchBase, background: 'rgba(180,120,40,0.12)', border: '1.5px dashed rgba(180,120,40,0.55)' }} />
+            <span>Additional income needed</span>
+          </div>
+        </div>
 
         {/* barRow is position:relative — tooltip is absolute inside it */}
         <div ref={barRowRef} style={S.barRow}>
@@ -1200,17 +1204,17 @@ export default function AffordabilityChart() {
                 boxSizing: 'border-box',
               }}>
                 {tooltip.which === 'income' && (<>
-                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 400, color: '#8B6F47', lineHeight: 1.4 }}>annual income</div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 400, color: '#C9A87A', lineHeight: 1.4 }}>annual income</div>
                   <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2 }}>{fmt(income)}</div>
                   <div style={{ fontSize: '13px', color: '#C4BDB8' }}>({fmt(mo_inc)} / month gross)</div>
                 </>)}
                 {tooltip.which === 'limit' && (<>
-                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 400, color: '#8B6F47', lineHeight: 1.4 }}>affordability limit · 28% rule</div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 400, color: '#C9A87A', lineHeight: 1.4 }}>affordability limit · 28% rule</div>
                   <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2 }}>{fmt(afford)} / month</div>
                   <div style={{ fontSize: '13px', color: '#C4BDB8' }}>maximum monthly housing cost</div>
                 </>)}
                 {tooltip.which === 'mortgage' && (<>
-                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 400, color: '#8B6F47', lineHeight: 1.4 }}>monthly mortgage</div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 400, color: '#C9A87A', lineHeight: 1.4 }}>monthly mortgage</div>
                   <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2 }}>{fmt(mo_mtg)} / month</div>
                   <div style={{ fontSize: '13px', color: '#C4BDB8' }}>30-yr fixed · median Boston home</div>
                   <div style={{ fontSize: '13px', color: over ? '#F5C4B3' : '#9FE1CB', marginTop: '2px' }}>
@@ -1223,7 +1227,7 @@ export default function AffordabilityChart() {
                   )}
                 </>)}
                 {tooltip.which === 'extension' && (<>
-                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 400, color: '#8B6F47', lineHeight: 1.4 }}>out of reach</div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '13px', fontWeight: 400, color: '#C9A87A', lineHeight: 1.4 }}>out of reach</div>
                   <div style={{ fontFamily: "'Lato', sans-serif", fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2 }}>+{fmt(gap_mo)} / month</div>
                   <div style={{ fontSize: '13px', color: '#C4BDB8' }}>additional income needed to qualify</div>
                   <div style={{ fontSize: '13px', color: '#C4BDB8', marginTop: '2px' }}>
@@ -1445,13 +1449,9 @@ export default function AffordabilityChart() {
       </div>{/* /stage */}
 
       {/* ── Source row ── */}
-      <div style={S.sourceRow}>
-        <div style={S.sourceText}>
-          <span style={S.sourceSpan}>Price:</span> Redfin Data Center (2012–2024); PropertyShark/MAR (2005–2011) ·{' '}
-          <span style={S.sourceSpan}>Income:</span> U.S. Census ACS 1-year, B19013 ·{' '}
-          <span style={S.sourceSpan}>Mortgage:</span> Freddie Mac PMMS 30-yr fixed · 20% down assumed
-        </div>
-      </div>
+      <p className="ftb-source" style={{ marginTop: '16px' }}>
+        Sources: Redfin Data Center (2012–2024); PropertyShark/MAR (2005–2011) · U.S. Census ACS 1-year, B19013 · Freddie Mac PMMS 30-yr fixed · 20% down assumed
+      </p>
 
     </div>
   );

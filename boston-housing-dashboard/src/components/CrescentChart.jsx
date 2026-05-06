@@ -497,16 +497,8 @@ export default function CrescentChart({
           </g>
         </svg>
       </div>
-    <p style={{
-      fontFamily: "'DM Mono', monospace",
-      fontSize: '11px',
-      color: '#A09C97',
-      lineHeight: 1.6,
-      marginTop: '12px',
-      paddingLeft: '4px',
-    }}>
-      Permits: U.S. Census Bureau, Building Permits Survey · census.gov/construction/bpermits ·
-      Household demand: calculated from ACS Table B11001 · 2024 demand estimated
+    <p className="ftb-source" style={{ marginTop: '12px' }}>
+      Sources: U.S. Census Bureau, Building Permits Survey · ACS Table B11001 (Household Type) · 2024 demand estimated
     </p>
   </div>
   )

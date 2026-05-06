@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import emailjs from '@emailjs/browser'
 
-const EMAILJS_SERVICE_ID  = 'BHT Feedback Submission'
-const EMAILJS_TEMPLATE_ID = 'bht_feedback_submission'
-const EMAILJS_PUBLIC_KEY  = 'F6H3ocyTZ0pcAF_m9'
+const EMAILJS_SERVICE_ID  = import.meta.env.VITE_EMAILJS_SERVICE_ID
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+const EMAILJS_PUBLIC_KEY  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 import { loadData } from './utils/parseData'
 import Tooltip from './components/Tooltip'
 import AffordabilityChart from './components/AffordabilityChart'
@@ -308,13 +308,12 @@ export default function App() {
       <Conclusion />
 
       {/* ── Authors + Sources ── */}
+      <div style={{ borderTop: '1px solid var(--border)', marginTop: '64px' }} />
       <footer style={{
-        borderTop: '1px solid var(--border)',
-        marginTop: '64px',
         paddingTop: '32px',
         paddingBottom: '64px',
         maxWidth: '720px',
-        margin: '64px auto 0',
+        margin: '0 auto',
       }}>
 
         {/* Authors */}

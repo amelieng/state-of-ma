@@ -255,8 +255,8 @@ export default function RenterGuess() {
         <div className="rg-buildings-wrap" ref={buildingsWrapRef} />
 
         {/* Source attribution */}
-        <p className="rg-source">
-          Source: Boston Mayor's Office of Housing, 2022 Housing Conditions Report · ACS 2016–2020 5-year estimates
+        <p className="rg-source" style={{ textAlign: 'center' }}>
+          Sources: Boston Mayor's Office of Housing, 2022 Housing Conditions Report · ACS 2016–2020 5-year estimates
         </p>
 
         {/* City comparison */}
@@ -265,7 +265,7 @@ export default function RenterGuess() {
           style={{ opacity: showComparison ? 1 : 0, pointerEvents: showComparison ? 'auto' : 'none' }}
         >
           <button className="rg-compare-toggle" onClick={handleCompareToggle}>
-            {compareOpen ? '↑ hide comparison' : '↓ see how boston compares'}
+            {compareOpen ? 'Hide comparison ↑' : 'See how Boston compares ↓'}
           </button>
 
           {/* Grid is kept in DOM so the CSS height transition can fire */}

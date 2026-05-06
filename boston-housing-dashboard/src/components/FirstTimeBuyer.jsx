@@ -1,16 +1,16 @@
+import { useState, useRef } from 'react'
+
 // Source: NAR Profile of Home Buyers and Sellers, various years
 // 2025 median age (40) and 2024 median age (38): NAR 2025 and 2024 reports
-// 1981–2022 data points: NAR historical trend data — verify each pair
+// 1992–2022 data points: NAR historical trend data — verify each pair
 // against individual annual reports before publishing
-// NOTE: 1981/29 is unverified — consider replacing with 1992/28
-// (sourced) as the historical comparison anchor
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 // Pre-computed SVG coordinates for the age trend line
 // ViewBox: 0 0 520 250  |  plot x=[44,480] y=[20,206]
 // xScale: 44 + (year−1981) × 9.909   |   yScale: 206 − (age−28) × 13.286
 const CHART_POINTS = [
-  { year: 1981, age: 29, x:  44, y: 193 },
+  { year: 1992, age: 28, x: 153, y: 206 },
   { year: 2000, age: 32, x: 232, y: 153 },
   { year: 2010, age: 30, x: 331, y: 179 },
   { year: 2018, age: 32, x: 411, y: 153 },
@@ -32,7 +32,7 @@ const Y_TICKS = [
 
 // x positions for x-axis labels
 const X_TICKS = [
-  { year: 1981, x:  44 },
+  { year: 1992, x: 153 },
   { year: 2000, x: 232 },
   { year: 2010, x: 331 },
   { year: 2025, x: 480 },
@@ -40,15 +40,42 @@ const X_TICKS = [
 
 const PORTRAIT_CARDS = [
   { label: 'median age',            stat: '38–40',   body: 'a decade older than their parents' },
-  { label: 'household income',      stat: '$97K',    body: 'needed just to get to the table' },
+  { label: 'household income',      stat: '$97K',    body: 'needed to afford a monthly mortgage payment' },
   { label: 'down payment',          stat: '9–10%',   body: 'highest since 1989' },
   { label: 'have kids at home',     stat: '27%',     body: 'down from 58% in 1985' },
-  { label: 'equity lost by waiting',stat: '~$150K',  body: 'buying at 40 vs. 30' },
+  { label: 'more in rent a first-time buyer pays today than in 2013', stat: '+69%', body: '' },
 ]
+
+const TT_W = 120
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function FirstTimeBuyer() {
+  const [tooltip, setTooltip] = useState(null)
+  const svgRef  = useRef(null)
+  const wrapRef = useRef(null)
   const polylinePoints = CHART_POINTS.map(p => `${p.x},${p.y}`).join(' ')
+
+  function handleEnter(p) {
+    if (!svgRef.current || !wrapRef.current) return
+    const svgRect  = svgRef.current.getBoundingClientRect()
+    const wrapRect = wrapRef.current.getBoundingClientRect()
+    const scale    = svgRect.width / 520
+    setTooltip({
+      point: p,
+      x: p.x * scale + (svgRect.left - wrapRect.left),
+      y: p.y * scale + (svgRect.top  - wrapRect.top),
+    })
+  }
+
+  const ttPos = (() => {
+    if (!tooltip || !wrapRef.current) return null
+    const cw   = wrapRef.current.offsetWidth
+    let left   = tooltip.x - TT_W / 2
+    if (left < 0)           left = 0
+    if (left + TT_W > cw)   left = cw - TT_W
+    const above = tooltip.y - 68 - 12
+    return { left, top: above < 0 ? tooltip.y + 12 : above }
+  })()
 
   return (
     <div className="ftb-wrap">
@@ -68,8 +95,8 @@ export default function FirstTimeBuyer() {
 
         <div className="ftb-hero-card ftb-hero-card--then">
           <p className="ftb-hero-era">Your parents' generation</p>
-          <p className="ftb-hero-yr">1981</p>
-          <div className="ftb-hero-age">29</div>
+          <p className="ftb-hero-yr">1992</p>
+          <div className="ftb-hero-age">28</div>
           <p className="ftb-hero-age-lbl">median age at first purchase</p>
 
         </div>
@@ -86,13 +113,14 @@ export default function FirstTimeBuyer() {
       </div>
 
       {/* ── Part 2: Age trend line chart ── */}
-      <div className="ftb-chart-outer">
-        <p className="ftb-chart-eyebrow">Median first-time buyer age · NAR, 1981–2025</p>
+      <div className="ftb-chart-outer" ref={wrapRef} style={{ position: 'relative' }}>
+        <p className="ftb-chart-eyebrow">Median first-time buyer age · NAR, 1992–2025</p>
         <svg
+          ref={svgRef}
           viewBox="0 0 520 250"
           width="100%"
           style={{ display: 'block' }}
-          aria-label="Line chart showing median first-time buyer age rising from 29 in 1981 to 40 in 2025"
+          aria-label="Line chart showing median first-time buyer age rising from 28 in 1992 to 40 in 2025"
         >
           {/* Y-axis grid lines */}
           {Y_TICKS.map(t => (
@@ -141,33 +169,59 @@ export default function FirstTimeBuyer() {
           />
 
           {/* Halos for highlighted points */}
-          <circle cx={44} cy={193} r={10} fill="rgba(139,74,74,0.07)" stroke="#C4A8A8" strokeWidth="1" />
-          <circle cx={480} cy={47} r={10} fill="rgba(139,74,74,0.07)" stroke="#C4A8A8" strokeWidth="1" />
+          <circle cx={153} cy={206} r={10} fill="rgba(139,74,74,0.07)" stroke="#C4A8A8" strokeWidth="1" />
+          <circle cx={480} cy={47}  r={10} fill="rgba(139,74,74,0.07)" stroke="#C4A8A8" strokeWidth="1" />
 
-          {/* Data point dots */}
+          {/* Data point dots + hit areas */}
           {CHART_POINTS.map(p => (
-            <circle
+            <g
               key={p.year}
-              cx={p.x} cy={p.y} r="4"
-              fill="#8B4A4A" stroke="#FFFFFF" strokeWidth="1.5"
-            />
+              onMouseEnter={() => handleEnter(p)}
+              onMouseLeave={() => setTooltip(null)}
+              style={{ cursor: 'pointer' }}
+            >
+              <circle cx={p.x} cy={p.y} r="12" fill="transparent" />
+              <circle
+                cx={p.x} cy={p.y}
+                r={tooltip?.point.year === p.year ? 5.5 : 4}
+                fill="#8B4A4A"
+              />
+            </g>
           ))}
 
           {/* Label connectors */}
-          <line x1={50} y1={176} x2={44} y2={193} stroke="#C4A8A8" strokeWidth="1" opacity="0.5" />
-          <line x1={460} y1={37} x2={480} y2={47} stroke="#C4A8A8" strokeWidth="1" opacity="0.5" />
+          <line x1={153} y1={172} x2={153} y2={206} stroke="#C4A8A8" strokeWidth="1" opacity="0.5" />
+          <line x1={460} y1={37}  x2={480} y2={47}  stroke="#C4A8A8" strokeWidth="1" opacity="0.5" />
 
-          {/* Label box: 1981 */}
-          <rect x={50} y={152} width={50} height={24} rx={2} fill="#F7F6F3" stroke="#D8CECE" strokeWidth="1" />
-          <text x={75} y={163} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="10" fontWeight="700" fill="#8B7070">29 y/o</text>
-          <text x={75} y={173} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="8" fill="#A09090">1981</text>
+          {/* Label box: 1992 */}
+          <rect x={128} y={148} width={50} height={24} rx={2} fill="#F7F6F3" stroke="#D8CECE" strokeWidth="1" />
+          <text x={153} y={159} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="10" fontWeight="700" fill="#8B7070">28 y/o</text>
+          <text x={153} y={169} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="8" fill="#A09090">1992</text>
 
           {/* Label box: 2025 */}
           <rect x={435} y={13} width={50} height={24} rx={2} fill="#F7F6F3" stroke="#D8CECE" strokeWidth="1" />
-          <text x={460} y={24} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="10" fontWeight="700" fill="#8B7070">40 y/o</text>
+          <text x={460} y={24} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="11" fontWeight="700" fill="#8B7070">40 y/o</text>
           <text x={460} y={34} textAnchor="middle" fontFamily="Lato, sans-serif" fontSize="8" fill="#A09090">2025</text>
 
+
         </svg>
+
+        {ttPos && (
+          <div style={{
+            position: 'absolute',
+            left: ttPos.left,
+            top: ttPos.top,
+            width: TT_W,
+            background: '#1C1916',
+            borderRadius: '4px',
+            padding: '0.75rem 1rem',
+            pointerEvents: 'none',
+            zIndex: 10,
+          }}>
+            <div style={{ fontFamily: 'var(--font-data)', fontSize: '13px', fontWeight: 400, color: '#C9A87A', lineHeight: 1.4 }}>{tooltip.point.year}</div>
+            <div style={{ fontFamily: 'var(--font-data)', fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2 }}>{tooltip.point.age} y/o</div>
+          </div>
+        )}
       </div>
 
       {/* ── Part 3: Portrait cards ── */}
@@ -183,8 +237,8 @@ export default function FirstTimeBuyer() {
       </div>
 
       {/* ── Source ── */}
-      <p className="ftb-source">
-        Source: NAR Profile of Home Buyers and Sellers, 2024–2025 · National data ·
+      <p className="ftb-source" style={{ marginTop: '16px' }}>
+        Sources: NAR Profile of Home Buyers and Sellers, 2024–2025 · National data ·
         Boston buyers face additional pressure from higher local home prices
       </p>
 

@@ -186,7 +186,7 @@ export default function SupplyGapChart() {
   }, [])
 
   return (
-    <section style={{ maxWidth: '1160px', margin: '0 auto', padding: '56px 48px 48px' }}>
+    <section style={{ maxWidth: '1160px', margin: '0 auto', padding: '56px 48px 56px' }}>
 
       {/* ── Eyebrow ── */}
       <p style={{
@@ -239,8 +239,7 @@ export default function SupplyGapChart() {
             <div style={{
               fontFamily: 'var(--font-heading)',
               fontSize: 'var(--size-callout)',
-              fontWeight: 300,
-              letterSpacing: '-0.5px',
+              fontWeight: 700,
               color,
               lineHeight: 1,
               marginBottom: '8px',
@@ -306,20 +305,6 @@ export default function SupplyGapChart() {
           <canvas id="supplyGapChart" />
         </div>
 
-        {/* Source footnote */}
-        <p style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '0.75rem',
-          fontWeight: 300,
-          fontStyle: 'italic',
-          color: '#A09C97',
-          marginTop: '12px',
-          lineHeight: 1.5,
-          paddingLeft: '4px',
-        }}>
-          MA DHCD Building Permit Survey (Boston proper) · U.S. Census ACS B11001 · EOHLC Housing Needs
-          Assessment · Metro Mayors Coalition. See methodology for demand line construction.
-        </p>
       </div>
 
       {/* ── Table card ── */}
@@ -422,8 +407,7 @@ export default function SupplyGapChart() {
       </div>
 
       {/* ── Sources ── */}
-      <p className="ftb-source" style={{ marginTop: '16px' }}>Source: MA DHCD Building Permit Survey, Boston proper, 1997–2024 — supply line</p>
-      <p className="ftb-source">U.S. Census Bureau, ACS Table B11001 (Household Type), annual 1-year estimates — household formation baseline</p>
+      <p className="ftb-source" style={{ marginTop: '16px' }}>Sources: MA DHCD Building Permit Survey, Boston proper, 1997–2024 · U.S. Census Bureau, ACS Table B11001 (Household Type), annual 1-year estimates · EOHLC Housing Needs Assessment · Metro Mayors Coalition. See methodology for demand line construction.</p>
 
     </section>
   )
