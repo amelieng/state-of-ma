@@ -151,7 +151,9 @@ export default function RenterGuess() {
 
     function update() {
       const boxBottom = box.offsetTop + box.offsetHeight
-      sky.style.bottom = (root.offsetHeight - boxBottom) + 'px'
+      const skyBottom = root.offsetHeight - boxBottom
+      sky.style.bottom = skyBottom + 'px'
+      root.style.setProperty('--sky-bottom', skyBottom + 'px')
     }
     update()
 
@@ -210,9 +212,10 @@ export default function RenterGuess() {
       <svg
         className="rg-skyline"
         ref={skylineRef}
-        viewBox="0 0 2400 300"
-        preserveAspectRatio="xMidYEnd meet"
+        viewBox="372 0 1656 300"
+        preserveAspectRatio="xMidYMax meet"
         aria-hidden="true"
+        style={{ position: 'absolute', bottom: 0, left: '50%', width: '100vw', height: '80%', transform: 'translateX(-50%)' }}
       >
         {/* Buildings — single continuous silhouette (no gaps, no bridge) */}
         <g fill="var(--blue)">
