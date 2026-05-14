@@ -1505,3 +1505,41 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
     gap: 24px;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   Supply vs Need section  (.sg-*)
+══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+  .sg-wrap {
+    padding: 40px 16px 40px !important;
+  }
+  .sg-heading {
+    font-size: 22px !important;
+    line-height: 1.25 !important;
+  }
+  .sg-subhead {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+  }
+  .sg-stats {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .sg-stats > div {
+    flex: 1 1 auto !important;
+    padding: 14px 16px !important;
+  }
+  .sg-chart-card {
+    padding: 20px 8px 8px !important;
+  }
+  .sg-chart-card > div:first-child {
+    gap: 14px !important;
+    margin-bottom: 14px !important;
+  }
+  .sg-table-card {
+    padding: 16px 14px !important;
+  }
+  .sg-table-card table {
+    min-width: 540px;
+  }
+}

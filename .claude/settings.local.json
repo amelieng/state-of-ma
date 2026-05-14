@@ -18,7 +18,15 @@
       "Bash(sed -i 's/fontSize=\"8\"/fontSize=\"13\"/g; s/fontSize=\"9\"/fontSize=\"13\"/g; s/fontSize=\"10\"/fontSize=\"13\"/g; s/fontSize=\"11\"/fontSize=\"13\"/g; s/fontSize=\"12\"/fontSize=\"13\"/g' boston-housing-dashboard/src/components/CrescentChart.jsx)",
       "Bash(start http://localhost:5173)",
       "PowerShell(Start-Process \"http://localhost:5173\")",
-      "Bash(start *)"
+      "Bash(start *)",
+      "mcp__figma-remote-mcp__get_metadata",
+      "mcp__figma-remote-mcp__get_libraries",
+      "mcp__figma-remote-mcp__use_figma",
+      "mcp__figma-remote-mcp__whoami",
+      "mcp__figma-remote-mcp__generate_figma_design",
+      "Bash(cmd *)",
+      "mcp__figma-remote-mcp__get_screenshot",
+      "mcp__figma-remote-mcp__get_design_context"
     ]
   }
 }

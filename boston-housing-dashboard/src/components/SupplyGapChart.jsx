@@ -186,7 +186,7 @@ export default function SupplyGapChart() {
   }, [])
 
   return (
-    <section style={{ maxWidth: '1160px', margin: '0 auto', padding: '56px 48px 56px' }}>
+    <section className="sg-wrap" style={{ maxWidth: '1160px', margin: '0 auto', padding: '56px 48px 56px' }}>
 
       {/* ── Eyebrow ── */}
       <p style={{
@@ -201,7 +201,7 @@ export default function SupplyGapChart() {
       </p>
 
       {/* ── Heading ── */}
-      <h2 style={{
+      <h2 className="sg-heading" style={{
         fontFamily: 'var(--font-heading)',
         fontSize: '28px',
         fontWeight: 700,
@@ -214,7 +214,7 @@ export default function SupplyGapChart() {
       </h2>
 
       {/* ── Subhead ── */}
-      <p style={{
+      <p className="sg-subhead" style={{
         fontFamily: 'var(--font-body)',
         fontSize: '16px',
         lineHeight: 1.7,
@@ -227,7 +227,7 @@ export default function SupplyGapChart() {
       </p>
 
       {/* ── Stat cards ── */}
-      <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
+      <div className="sg-stats" style={{ display: 'flex', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
         {STAT_CARDS.map(({ val, color, label }) => (
           <div key={label} style={{
             flex: '1 1 200px',
@@ -259,7 +259,7 @@ export default function SupplyGapChart() {
       </div>
 
       {/* ── Chart card ── */}
-      <div style={{
+      <div className="sg-chart-card" style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
         borderRadius: '10px',
@@ -308,12 +308,13 @@ export default function SupplyGapChart() {
       </div>
 
       {/* ── Table card ── */}
-      <div style={{
+      <div className="sg-table-card" style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
         borderRadius: '8px',
         padding: '20px 24px',
         overflowX: 'auto',
+        WebkitOverflowScrolling: 'touch',
       }}>
         <p style={{
           fontFamily: 'var(--font-heading)',

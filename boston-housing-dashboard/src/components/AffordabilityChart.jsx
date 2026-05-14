@@ -121,7 +121,23 @@ function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
 // ── Component ─────────────────────────────────────────────────
 export default function AffordabilityChart() {
   const [selectedYear, setSelectedYear] = useState(2024);
-  const [sidebarOpen, setSidebarOpen]   = useState(true);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 600px)').matches
+  );
+  const [sidebarOpen, setSidebarOpen]   = useState(() =>
+    !(typeof window !== 'undefined' && window.matchMedia('(max-width: 600px)').matches)
+  );
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 600px)');
+    const handler = (e) => {
+      setIsMobile(e.matches);
+      setSidebarOpen(!e.matches);
+    };
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   const selectedIndex = RAW.findIndex(d => d.year === selectedYear);
   const fillPct       = `${(selectedIndex / (RAW.length - 1)) * 100}%`;
@@ -889,6 +905,505 @@ export default function AffordabilityChart() {
       color: '#3B6B8A',
     },
   };
+
+  // ── Mobile render ────────────────────────────────────────────
+  if (isMobile) {
+    const BAR_PX_M = 290;
+    const iW_m   = (mo_inc / BAR_SCALE * BAR_PX_M).toFixed(1);
+    const extW_m = (gap_mo / BAR_SCALE * BAR_PX_M).toFixed(1);
+
+    const labelStyle = {
+      fontFamily: "'Lato', sans-serif",
+      fontSize: '13px',
+      textTransform: 'uppercase',
+      letterSpacing: '0.07em',
+      color: '#A09C97',
+      lineHeight: 1.3,
+      marginBottom: '3px',
+    };
+    const valStyle = (red) => ({
+      fontFamily: "'Lato', sans-serif",
+      fontSize: '24px',
+      fontWeight: 700,
+      lineHeight: 1.1,
+      color: red ? '#8B4A4A' : '#1C1916',
+    });
+    const arrowBtn = (disabled) => ({
+      background: '#3B6B8A',
+      border: 'none',
+      borderRadius: '6px',
+      padding: '9px 16px',
+      color: '#F7F6F3',
+      fontFamily: "'Lato', sans-serif",
+      fontSize: '15px',
+      fontWeight: 600,
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      opacity: disabled ? 0.35 : 1,
+      flexShrink: 0,
+    });
+    const legendSwatch = (style) => ({
+      width: '20px',
+      height: '10px',
+      borderRadius: '2px',
+      flexShrink: 0,
+      ...style,
+    });
+
+    return (
+      <div className="affordability-chart aff-mobile" style={{
+        padding: '10px',
+        background: '#F7F6F3',
+        fontFamily: "'Lato', sans-serif",
+        color: '#1C1916',
+      }}>
+        <div style={{
+          background: '#FFFFFF',
+          borderRadius: '10px',
+          padding: '32px 20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '32px',
+        }}>
+
+          {/* Header */}
+          <div style={{
+            borderBottom: '1px solid #E2DDD6',
+            paddingBottom: '24px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+          }}>
+            <div style={{
+              display: 'flex',
+              gap: '12px',
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontFamily: "'Lato', sans-serif",
+              fontWeight: 900,
+              fontSize: '26px',
+              lineHeight: 1.2,
+              letterSpacing: '-0.4px',
+              textAlign: 'center',
+            }}>
+              <span style={{ color: TIER_COLORS[stageTier] }}>{stageLabel}</span>
+              <span style={{ color: '#E2DDD6', whiteSpace: 'nowrap' }}>·</span>
+              <span style={{ color: over ? '#8B4A4A' : '#1C1916', whiteSpace: 'nowrap' }}>{selectedYear}</span>
+            </div>
+            {(selectedYear === MOST_AFFORDABLE_YEAR || selectedYear === LEAST_AFFORDABLE_YEAR) && (
+              <div style={{ ...S.landmarkBase, ...S.landmarkBest, alignSelf: 'center', whiteSpace: 'normal', textAlign: 'center' }}>
+                ◆ {selectedYear === MOST_AFFORDABLE_YEAR
+                  ? 'Most affordable year on record'
+                  : 'Least affordable year on record'}
+              </div>
+            )}
+            <p style={{ fontSize: '15px', lineHeight: 1.65, margin: 0, color: '#1C1916' }}>
+              {over
+                ? `In ${selectedYear}, ${stageShort} would spend ${pctVal}% of monthly income on a mortgage — ${fmt(mo_mtg - afford)}/month above the affordability limit.`
+                : `In ${selectedYear}, ${stageShort} would spend ${pctVal}% of monthly income on a mortgage — within reach of the 28% affordability threshold.`}
+            </p>
+            {note && (
+              <p style={{ fontSize: '15px', lineHeight: 1.65, margin: 0, color: '#6B6560' }}>{note}</p>
+            )}
+          </div>
+
+          {/* 2×2 metrics */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            columnGap: '24px',
+            rowGap: '16px',
+          }}>
+            <div>
+              <div style={labelStyle}>Monthly mortgage payment</div>
+              <div style={valStyle(over)}>{fmt(mo_mtg)}</div>
+            </div>
+            <div>
+              <div style={labelStyle}>Annual income needed to qualify</div>
+              <div style={valStyle(over)}>{fmt(needed_yr)}</div>
+            </div>
+            <div>
+              <div style={labelStyle}>Left over each month</div>
+              <div style={valStyle(leftover < 0)}>{fmt(leftover)}</div>
+            </div>
+            <div>
+              <div style={labelStyle}>Mortgage rate</div>
+              <div style={valStyle(false)}>{rawYear.rate}%</div>
+            </div>
+          </div>
+
+          {/* Arrows + house */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button
+              style={arrowBtn(atFirst)}
+              onClick={goEarlier}
+              disabled={atFirst}
+              aria-label="Earlier year"
+            >←</button>
+            <div style={{ flex: 1, minWidth: 0, position: 'relative' }}>
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                fontFamily: "'Lato', sans-serif",
+                fontSize: '16.9px',
+                fontWeight: 500,
+                color: '#3B6B8A',
+                zIndex: 1,
+              }}>{selectedYear}</div>
+              <svg width="100%" height="220" viewBox="0 0 480 220" style={{ display: 'block' }} preserveAspectRatio="xMidYMid meet">
+                <defs>
+                  <linearGradient id="housePathGradM" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%"   stopColor="#C8A882" stopOpacity={pFarOp} />
+                    <stop offset="100%" stopColor="#C8A882" stopOpacity={pNearOp} />
+                  </linearGradient>
+                </defs>
+                <polygon
+                  points={`${ptL.toFixed(1)},${hBaseY.toFixed(1)} ${ptR.toFixed(1)},${hBaseY.toFixed(1)} 388,220 92,220`}
+                  fill="url(#housePathGradM)"
+                  stroke="none"
+                  style={{ filter: `blur(${pPathBlur.toFixed(2)}px)` }}
+                />
+                <line x1={ptL.toFixed(1)} y1={hBaseY.toFixed(1)} x2="92"  y2="220" stroke="#8B6B4A" strokeWidth="1.1" strokeDasharray="4 4" opacity="0.22" />
+                <line x1={ptR.toFixed(1)} y1={hBaseY.toFixed(1)} x2="388" y2="220" stroke="#8B6B4A" strokeWidth="1.1" strokeDasharray="4 4" opacity="0.22" />
+                <line x1="240" y1={hBaseY.toFixed(1)} x2="240" y2="220" stroke="#A08060" strokeWidth="1" strokeDasharray="5 7" opacity="0.15" />
+                <g transform={`translate(${hLeft.toFixed(1)}, ${hTopY.toFixed(1)})`} style={{ filter: `blur(${hBlur.toFixed(2)}px)` }}>
+                  <rect x={chX} y={chY} width={chW} height={chH} fill={HOUSE_COLORS.chimney} rx="2" />
+                  <rect x="0" y={roofH} width={hW} height={bodyH} fill={HOUSE_COLORS.body} rx="2" />
+                  <rect x="0" y={roofH} width={hW} height={gableH} fill={HOUSE_COLORS.gable} />
+                  <polygon points={roofPts} fill={HOUSE_COLORS.roof} />
+                  <line x1={ridgeX1} y1={ridgeY} x2={ridgeX2} y2={ridgeY} stroke="rgba(255,255,255,0.25)" strokeWidth={ridgeSW} strokeLinecap="round" />
+                  <rect x={dX} y={dY} width={dW} height={dH} fill={HOUSE_COLORS.door} rx="3" />
+                  <rect x={winLX} y={winY} width={winW2} height={winH2} fill={HOUSE_COLORS.win} rx="2" />
+                  <rect x={winRX} y={winY} width={winW2} height={winH2} fill={HOUSE_COLORS.win} rx="2" />
+                  <line x1={winLX}        y1={winY + winMY} x2={winLX + winW2} y2={winY + winMY} stroke={HOUSE_COLORS.winFrame} strokeWidth={winSW} opacity="0.45" />
+                  <line x1={winLX + winMX} y1={winY}         x2={winLX + winMX} y2={winY + winH2} stroke={HOUSE_COLORS.winFrame} strokeWidth={winSW} opacity="0.45" />
+                  <line x1={winRX}        y1={winY + winMY} x2={winRX + winW2} y2={winY + winMY} stroke={HOUSE_COLORS.winFrame} strokeWidth={winSW} opacity="0.45" />
+                  <line x1={winRX + winMX} y1={winY}         x2={winRX + winMX} y2={winY + winH2} stroke={HOUSE_COLORS.winFrame} strokeWidth={winSW} opacity="0.45" />
+                  <rect x={stX} y={stY} width={stW} height={stH} fill={HOUSE_COLORS.step} rx="1" />
+                </g>
+              </svg>
+            </div>
+            <button
+              style={arrowBtn(atLast)}
+              onClick={goLater}
+              disabled={atLast}
+              aria-label="Later year"
+            >→</button>
+          </div>
+
+          {/* Affordability ruler */}
+          <div>
+            <p style={{
+              fontSize: '11px',
+              fontWeight: 400,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: '#A09C97',
+              margin: '0 0 8px',
+            }}>Affordability Ruler</p>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              columnGap: '12px',
+              rowGap: '4px',
+              marginBottom: '24px',
+              fontSize: '13px',
+              color: '#A09C97',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={legendSwatch({ background: '#EDE9E3', border: '1px solid #E2DDD6' })} />
+                <span>Monthly income</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={legendSwatch({ background: 'rgba(139,74,74,0.18)', border: '1px solid rgba(139,74,74,0.4)' })} />
+                <span>Mortgage over limit</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={legendSwatch({ border: '1px solid rgba(59,107,138,0.35)' })} />
+                <span>28% affordability limit</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={legendSwatch({ background: 'rgba(180,120,40,0.12)', border: '1.5px dashed rgba(180,120,40,0.55)' })} />
+                <span>Additional income needed</span>
+              </div>
+            </div>
+
+            {/* Bar */}
+            <div style={{ display: 'flex', alignItems: 'stretch', height: '12px', position: 'relative' }}>
+              <div style={{
+                width: `${iW_m}px`,
+                background: '#EDE9E3',
+                border: '1px solid #E2DDD6',
+                borderRight: hasExt ? 'none' : '2px solid #6B6560',
+                borderRadius: hasExt ? '2px 0 0 2px' : '2px',
+                position: 'relative',
+                flexShrink: 0,
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  top: 0, left: 0, bottom: 0,
+                  width: '28%',
+                  background: 'repeating-linear-gradient(-45deg, rgba(59,107,138,0.18) 0px, rgba(59,107,138,0.18) 1.5px, transparent 1.5px, transparent 4px)',
+                  borderRight: '1px dashed rgba(59,107,138,0.45)',
+                  borderRadius: '2px 0 0 2px',
+                }} />
+                {over && (
+                  <div style={{
+                    position: 'absolute',
+                    top: 0, bottom: 0,
+                    left: '28%',
+                    width: `${redW}%`,
+                    background: 'rgba(139,74,74,0.18)',
+                  }} />
+                )}
+                {over && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '-2px', bottom: '-2px',
+                    left: `calc(${Math.min(parseFloat(mtgPct), 99.5)}% - 0.5px)`,
+                    width: '1.5px',
+                    background: 'rgba(139,74,74,0.7)',
+                    borderRadius: '0.5px',
+                  }} />
+                )}
+              </div>
+              {hasExt && (
+                <div style={{
+                  width: `${extW_m}px`,
+                  background: 'rgba(180,120,40,0.12)',
+                  border: '1px dashed rgba(180,120,40,0.55)',
+                  borderLeft: 'none',
+                  borderRadius: '0 2px 2px 0',
+                  flexShrink: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: '4px',
+                  overflow: 'hidden',
+                }}>
+                  {extLong && (
+                    <span style={{
+                      fontSize: '8.5px',
+                      fontWeight: 500,
+                      color: 'rgba(160,100,20,0.85)',
+                      whiteSpace: 'nowrap',
+                      pointerEvents: 'none',
+                    }}>{extLabelText}</span>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'auto auto',
+              columnGap: '16px',
+              rowGap: '4px',
+              marginTop: '16px',
+              fontSize: '13px',
+              lineHeight: 1.4,
+            }}>
+              <span style={{ color: '#6B6560' }}>Income: ${Math.round(income / 1000)}K / yr ({fmt(mo_inc)}/mo)</span>
+              <span style={{ color: 'rgba(59,107,138,0.75)' }}>Limit: {fmt(afford)}/mo</span>
+              {over && <span style={{ color: '#8B4A4A' }}>+{fmt(mo_mtg - afford)} over limit</span>}
+            </div>
+          </div>
+
+          {/* "What if you were a..." CTA */}
+          <button
+            onClick={() => setSidebarOpen(true)}
+            style={{
+              background: '#F7F6F3',
+              borderLeft: '10px solid #3B6B8A',
+              borderTop: 'none',
+              borderRight: 'none',
+              borderBottom: 'none',
+              borderRadius: '8px',
+              padding: '16px 12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              cursor: 'pointer',
+              textAlign: 'left',
+              width: '100%',
+            }}
+            aria-label="Open persona picker"
+          >
+            <span style={{
+              width: '30px',
+              height: '30px',
+              borderRadius: '50%',
+              background: '#3B6B8A',
+              color: '#FFFFFF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '20px',
+              fontWeight: 700,
+              fontFamily: "'Lato', sans-serif",
+              flexShrink: 0,
+            }}>?</span>
+            <span style={{
+              fontSize: '13px',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: '#A09C97',
+            }}>What if you were a...</span>
+          </button>
+        </div>
+
+        {/* Source row */}
+        <p className="ftb-source" style={{
+          marginTop: '12px',
+          padding: '0 8px',
+          fontSize: '11px',
+          color: '#A09C97',
+          lineHeight: 1.5,
+        }}>
+          Sources: Redfin Data Center (2012–2024); PropertyShark/MAR (2005–2011) · U.S. Census ACS 1-year, B19013 · Freddie Mac PMMS 30-yr fixed · 20% down assumed
+        </p>
+
+        {/* Bottom sheet */}
+        {sidebarOpen && (
+          <>
+            <div
+              onClick={() => setSidebarOpen(false)}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                background: 'rgba(0,0,0,0.4)',
+                backdropFilter: 'blur(2px)',
+                WebkitBackdropFilter: 'blur(2px)',
+                zIndex: 1000,
+              }}
+            />
+            <div
+              role="dialog"
+              aria-label="Choose a persona or household"
+              style={{
+                position: 'fixed',
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: '#FAFAF8',
+                borderTopLeftRadius: '14px',
+                borderTopRightRadius: '14px',
+                padding: '12px 18px 24px',
+                zIndex: 1001,
+                maxHeight: '85vh',
+                overflowY: 'auto',
+                boxShadow: '0 -8px 32px rgba(0,0,0,0.2)',
+                fontFamily: "'Lato', sans-serif",
+              }}
+            >
+              <div style={{
+                width: '36px',
+                height: '4px',
+                borderRadius: '2px',
+                background: '#E2DDD6',
+                margin: '4px auto 16px',
+              }} />
+              <div style={{
+                fontSize: '13px',
+                letterSpacing: '0.13em',
+                textTransform: 'uppercase',
+                color: '#A09C97',
+                marginBottom: '12px',
+              }}>What if you were a...</div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <button style={{ ...pillStyle('median'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('median'); setSelectedHHSize(null); }}>
+                  <span style={{ ...S.pillDot, background: '#3B6B8A' }} />Average Bostonian
+                </button>
+                <div style={S.sidebarDivider} />
+                <button style={{ ...pillStyle('home_health'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('home_health'); setSelectedHHSize(null); }}>
+                  <span style={{ ...S.pillDot, background: '#8B4A4A' }} />Home health aide
+                </button>
+                <button style={{ ...pillStyle('childcare'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('childcare'); setSelectedHHSize(null); }}>
+                  <span style={{ ...S.pillDot, background: '#8B4A4A' }} />Childcare worker
+                </button>
+                <button style={{ ...pillStyle('restaurant'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('restaurant'); setSelectedHHSize(null); }}>
+                  <span style={{ ...S.pillDot, background: '#8B4A4A' }} />Restaurant worker
+                </button>
+                <div style={S.sidebarDivider} />
+                <button style={{ ...pillStyle('teacher'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('teacher'); setSelectedHHSize(null); }}>
+                  <span style={{ ...S.pillDot, background: '#b87c20' }} />Teacher
+                </button>
+                <button style={{ ...pillStyle('transit'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('transit'); setSelectedHHSize(null); }}>
+                  <span style={{ ...S.pillDot, background: '#b87c20' }} />Transit driver
+                </button>
+                <button style={{ ...pillStyle('firefighter'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('firefighter'); setSelectedHHSize(null); }}>
+                  <span style={{ ...S.pillDot, background: '#b87c20' }} />Firefighter
+                </button>
+                <button style={{ ...pillStyle('nurse'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('nurse'); setSelectedHHSize(null); }}>
+                  <span style={{ ...S.pillDot, background: '#b87c20' }} />Registered nurse
+                </button>
+                <div style={S.sidebarDivider} />
+                <button style={{ ...pillStyle('software_dev'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('software_dev'); setSelectedHHSize(null); }}>
+                  <span style={{ ...S.pillDot, background: '#3b7a3b' }} />Software developer
+                </button>
+
+                <div style={S.sidebarDivider} />
+                <div style={{ ...S.sidebarEyebrow, marginTop: '10px' }}>or by household size</div>
+                {householdSizeOptions.map(opt => (
+                  <button
+                    key={opt.id}
+                    style={{ ...hhSizePillStyle(opt.id), padding: '10px 8px' }}
+                    onClick={() => setSelectedHHSize(opt.id)}
+                  >
+                    <span style={{ ...S.pillDot, background: '#3B6B8A' }} />
+                    {opt.label}
+                  </button>
+                ))}
+                <div style={{ ...S.hhCallout, marginTop: '8px' }}>
+                  Home price based on a bedroom-appropriate size for your household.
+                </div>
+              </div>
+
+              <div style={{
+                display: 'flex',
+                gap: '8px',
+                justifyContent: 'center',
+                marginTop: '16px',
+                paddingTop: '16px',
+                borderTop: '1px solid #E2DDD6',
+              }}>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  style={{
+                    background: '#3B6B8A',
+                    border: '1px solid #E2DDD6',
+                    color: '#F7F6F3',
+                    padding: '8px 18px',
+                    borderRadius: '4px',
+                    fontSize: '13px',
+                    letterSpacing: '0.05em',
+                    cursor: 'pointer',
+                    fontFamily: "'Lato', sans-serif",
+                  }}
+                >Submit</button>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  style={{
+                    background: 'transparent',
+                    border: '1px solid #E2DDD6',
+                    color: '#6B6560',
+                    padding: '8px 18px',
+                    borderRadius: '4px',
+                    fontSize: '13px',
+                    letterSpacing: '0.05em',
+                    cursor: 'pointer',
+                    fontFamily: "'Lato', sans-serif",
+                  }}
+                >‹ Close</button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="affordability-chart" style={S.page}>
