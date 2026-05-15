@@ -433,6 +433,16 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
   overflow: hidden;
 }
 
+/* Flex children default to min-width: auto, which prevents them from
+   shrinking below their content's natural width. With wide content like a
+   Chart.js canvas, that pushes the section wider than viewport and breaks
+   mobile layout. Forcing min-width: 0 + max-width: 100% lets every section
+   honour the viewport boundary. */
+.scroll-section > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
 /* ── RenterGuess component ───────────────────────────────────────────────── */
 .renter-guess {
   max-width: 1160px;
