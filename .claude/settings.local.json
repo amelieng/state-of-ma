@@ -43,7 +43,10 @@
       "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" log --all --oneline -10)",
       "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" diff HEAD -- boston-housing-dashboard/src/index.css boston-housing-dashboard/src/components/AffordabilityChart.jsx)",
       "Bash(curl -sk \"https://housing-truths.netlify.app/assets/index-C9EhmFpi.js\" -o \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.js\")",
-      "Bash(grep -oE \"fontSize:'26px'\\\\\\\\|fontSize:'14px'\\\\\\\\|labelStyle\" \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.js\")"
+      "Bash(grep -oE \"fontSize:'26px'\\\\\\\\|fontSize:'14px'\\\\\\\\|labelStyle\" \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.js\")",
+      "Bash(curl -skL \"https://housingtruths.org/\")",
+      "Bash(curl -skL \"https://housing-truths.netlify.app/\")",
+      "Bash(curl -skvL \"https://housingtruths.org/\")"
     ]
   }
 }
