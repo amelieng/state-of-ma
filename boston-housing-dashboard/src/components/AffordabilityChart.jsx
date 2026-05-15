@@ -162,11 +162,37 @@ export default function AffordabilityChart() {
   // ── Tooltip state ─────────────────────────────────────────────
   const [tooltip, setTooltip]       = useState(null);
   const [hoveredBar, setHoveredBar] = useState(null);
-  const barRowRef   = useRef(null);
-  const barOuterRef = useRef(null);
+  const barRowRef       = useRef(null);
+  const barOuterRef     = useRef(null);
+  const mobileBarRef    = useRef(null);  // mobile-only bar container
   const [isFinePointer] = useState(() =>
     typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches
   );
+
+  // ── Mobile sticky-dock visibility (only show while section is on screen) ──
+  const affWrapperRef = useRef(null);
+  const [dockVisible, setDockVisible] = useState(false);
+
+  useEffect(() => {
+    if (!isMobile || !affWrapperRef.current) {
+      setDockVisible(false);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => setDockVisible(entry.isIntersecting),
+      { threshold: 0, rootMargin: '0px 0px -10% 0px' }
+    );
+    observer.observe(affWrapperRef.current);
+    return () => observer.disconnect();
+  }, [isMobile]);
+
+  // ── Escape closes the persona bottom sheet ────────────────────────────────
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const handler = (e) => { if (e.key === 'Escape') setSidebarOpen(false); };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [sidebarOpen]);
 
   // ── House animation ──────────────────────────────────────────
   const animFrameRef    = useRef(null);
@@ -210,11 +236,13 @@ export default function AffordabilityChart() {
     return () => { if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current); };
   }, [selectedYear, selectedOccupation, selectedHHSize]);
 
-  // ── Click-outside to dismiss tooltip (mobile) ─────────────────
+  // ── Click-outside to dismiss tooltip (mobile + desktop) ───────
   useEffect(() => {
     if (!tooltip) return;
     function handleOutside(e) {
-      if (barRowRef.current && !barRowRef.current.contains(e.target)) {
+      const inDesktopBar = barRowRef.current    && barRowRef.current.contains(e.target);
+      const inMobileBar  = mobileBarRef.current && mobileBarRef.current.contains(e.target);
+      if (!inDesktopBar && !inMobileBar) {
         setTooltip(null);
       }
     }
@@ -955,8 +983,9 @@ export default function AffordabilityChart() {
     });
 
     return (
-      <div className="affordability-chart aff-mobile" style={{
+      <div ref={affWrapperRef} className="affordability-chart aff-mobile" style={{
         padding: '10px',
+        paddingBottom: 'calc(96px + env(safe-area-inset-bottom))',
         background: '#F7F6F3',
         fontFamily: "'Lato', sans-serif",
         color: '#1C1916',
@@ -1130,165 +1159,274 @@ export default function AffordabilityChart() {
             >→</button>
           </div>
 
-          {/* Affordability ruler */}
-          <div>
-            <p style={{
-              fontSize: '12px',
-              fontWeight: 400,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: '#A09C97',
-              margin: '0 0 8px',
-            }}>Affordability Ruler</p>
+          {/* Affordability ruler — mobile: bigger bar + tap/drag tooltips */}
+          {(() => {
+            const iW_num   = parseFloat(iW_m);
+            const extW_num = parseFloat(extW_m);
+            const mtgPctNum = parseFloat(mtgPct);
 
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              columnGap: '12px',
-              rowGap: '4px',
-              marginBottom: '24px',
-              fontSize: '14px',
-              color: '#A09C97',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={legendSwatch({ background: '#EDE9E3', border: '1px solid #E2DDD6' })} />
-                <span>Monthly income</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={legendSwatch({ background: 'rgba(139,74,74,0.18)', border: '1px solid rgba(139,74,74,0.4)' })} />
-                <span>Mortgage over limit</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={legendSwatch({ border: '1px solid rgba(59,107,138,0.35)' })} />
-                <span>28% affordability limit</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={legendSwatch({ background: 'rgba(180,120,40,0.12)', border: '1.5px dashed rgba(180,120,40,0.55)' })} />
-                <span>Additional income needed</span>
-              </div>
-            </div>
+            // Map a touch X (in px relative to the mobile bar container) to a
+            // tooltip "segment" — mirrors the four desktop variants.
+            const segmentAt = (touchX) => {
+              if (touchX < 0) touchX = 0;
+              const total = iW_num + (hasExt ? extW_num : 0);
+              if (touchX > total) touchX = total;
+              if (hasExt && touchX > iW_num) return { which: 'extension', x: touchX };
+              if (touchX > iW_num)           return { which: 'income',    x: touchX };
+              const pct = (touchX / iW_num) * 100;
+              if (Math.abs(pct - mtgPctNum) < 8) return { which: 'mortgage', x: touchX };
+              if (pct <= 28)                     return { which: 'limit',    x: touchX };
+              if (over && pct <= mtgPctNum)      return { which: 'mortgage', x: touchX };
+              return { which: 'income', x: touchX };
+            };
 
-            {/* Bar */}
-            <div style={{ display: 'flex', alignItems: 'stretch', height: '12px', position: 'relative' }}>
-              <div style={{
-                width: `${iW_m}px`,
-                background: '#EDE9E3',
-                border: '1px solid #E2DDD6',
-                borderRight: hasExt ? 'none' : '2px solid #6B6560',
-                borderRadius: hasExt ? '2px 0 0 2px' : '2px',
-                position: 'relative',
-                flexShrink: 0,
-              }}>
+            const handleTouch = (e) => {
+              if (!mobileBarRef.current) return;
+              const rect = mobileBarRef.current.getBoundingClientRect();
+              const t = e.touches?.[0] || e.changedTouches?.[0];
+              if (!t) return;
+              const touchX = t.clientX - rect.left;
+              const seg = segmentAt(touchX);
+              setTooltip({ ...seg, mobile: true });
+            };
+
+            return (
+              <div>
+                <p style={{
+                  fontSize: '12px',
+                  fontWeight: 400,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: '#A09C97',
+                  margin: '0 0 12px',
+                }}>Affordability Ruler</p>
+
+                {/* Legend */}
                 <div style={{
-                  position: 'absolute',
-                  top: 0, left: 0, bottom: 0,
-                  width: '28%',
-                  background: 'repeating-linear-gradient(-45deg, rgba(59,107,138,0.18) 0px, rgba(59,107,138,0.18) 1.5px, transparent 1.5px, transparent 4px)',
-                  borderRight: '1px dashed rgba(59,107,138,0.45)',
-                  borderRadius: '2px 0 0 2px',
-                }} />
-                {over && (
-                  <div style={{
-                    position: 'absolute',
-                    top: 0, bottom: 0,
-                    left: '28%',
-                    width: `${redW}%`,
-                    background: 'rgba(139,74,74,0.18)',
-                  }} />
-                )}
-                {over && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '-2px', bottom: '-2px',
-                    left: `calc(${Math.min(parseFloat(mtgPct), 99.5)}% - 0.5px)`,
-                    width: '1.5px',
-                    background: 'rgba(139,74,74,0.7)',
-                    borderRadius: '0.5px',
-                  }} />
-                )}
-              </div>
-              {hasExt && (
-                <div style={{
-                  width: `${extW_m}px`,
-                  background: 'rgba(180,120,40,0.12)',
-                  border: '1px dashed rgba(180,120,40,0.55)',
-                  borderLeft: 'none',
-                  borderRadius: '0 2px 2px 0',
-                  flexShrink: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  paddingLeft: '4px',
-                  overflow: 'hidden',
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  columnGap: '14px',
+                  rowGap: '8px',
+                  marginBottom: '28px',
+                  fontSize: '14px',
+                  color: '#6B6560',
                 }}>
-                  {extLong && (
-                    <span style={{
-                      fontSize: '8.5px',
-                      fontWeight: 500,
-                      color: 'rgba(160,100,20,0.85)',
-                      whiteSpace: 'nowrap',
-                      pointerEvents: 'none',
-                    }}>{extLabelText}</span>
-                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={legendSwatch({ background: '#EDE9E3', border: '1px solid #E2DDD6', width: '26px', height: '14px' })} />
+                    <span>Monthly income</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={legendSwatch({ background: 'rgba(139,74,74,0.20)', border: '1px solid rgba(139,74,74,0.4)', width: '26px', height: '14px' })} />
+                    <span>Mortgage over limit</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={legendSwatch({
+                      background: 'repeating-linear-gradient(-45deg, rgba(59,107,138,0.18) 0px, rgba(59,107,138,0.18) 2px, transparent 2px, transparent 6px)',
+                      border: '1px solid rgba(59,107,138,0.35)',
+                      width: '26px', height: '14px',
+                    })} />
+                    <span>28% affordability limit</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={legendSwatch({ background: 'rgba(180,120,40,0.14)', border: '1.5px dashed rgba(180,120,40,0.55)', width: '26px', height: '14px' })} />
+                    <span>Additional income needed</span>
+                  </div>
                 </div>
-              )}
-            </div>
 
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'auto auto',
-              columnGap: '16px',
-              rowGap: '4px',
-              marginTop: '16px',
-              fontSize: '14px',
-              lineHeight: 1.4,
-            }}>
-              <span style={{ color: '#6B6560' }}>Income: ${Math.round(income / 1000)}K / yr ({fmt(mo_inc)}/mo)</span>
-              <span style={{ color: 'rgba(59,107,138,0.75)' }}>Limit: {fmt(afford)}/mo</span>
-              {over && <span style={{ color: '#8B4A4A' }}>+{fmt(mo_mtg - afford)} over limit</span>}
-            </div>
-          </div>
+                {/* Bar container — touch-interactive */}
+                <div
+                  ref={mobileBarRef}
+                  style={{ position: 'relative', paddingTop: '54px' /* room for tooltip */ }}
+                >
 
-          {/* "What if you were a..." CTA */}
-          <button
-            onClick={() => setSidebarOpen(true)}
-            style={{
-              background: '#F7F6F3',
-              borderLeft: '10px solid #3B6B8A',
-              borderTop: 'none',
-              borderRight: 'none',
-              borderBottom: 'none',
-              borderRadius: '8px',
-              padding: '16px 12px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '16px',
-              cursor: 'pointer',
-              textAlign: 'left',
-              width: '100%',
-            }}
-            aria-label="Open persona picker"
-          >
-            <span style={{
-              width: '30px',
-              height: '30px',
-              borderRadius: '50%',
-              background: '#3B6B8A',
-              color: '#FFFFFF',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '20px',
-              fontWeight: 700,
-              fontFamily: "'Lato', sans-serif",
-              flexShrink: 0,
-            }}>?</span>
-            <span style={{
-              fontSize: '14px',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: '#A09C97',
-            }}>What if you were a...</span>
-          </button>
+                  {/* Mobile tooltip — appears above the bar, follows finger */}
+                  {tooltip && tooltip.mobile && (() => {
+                    const TW = 220;
+                    const container = mobileBarRef.current;
+                    const containerW = container ? container.getBoundingClientRect().width : iW_num + (hasExt ? extW_num : 0);
+                    const rawLeft = tooltip.x - TW / 2;
+                    const leftPx  = Math.max(0, Math.min(rawLeft, Math.max(0, containerW - TW)));
+                    const caretLeft = Math.max(12, Math.min(tooltip.x - leftPx, TW - 16));
+                    return (
+                      <div style={{
+                        position: 'absolute',
+                        bottom: 'calc(100% - 50px)',
+                        left: `${leftPx}px`,
+                        width: `${TW}px`,
+                        background: '#1C1916',
+                        color: '#F7F6F3',
+                        fontFamily: "'Lato', sans-serif",
+                        padding: '12px 14px',
+                        borderRadius: '6px',
+                        pointerEvents: 'none',
+                        zIndex: 10,
+                        boxSizing: 'border-box',
+                        boxShadow: '0 4px 14px rgba(0,0,0,0.18)',
+                      }}>
+                        {tooltip.which === 'income' && (<>
+                          <div style={{ fontSize: '12px', fontWeight: 400, color: '#C9A87A', lineHeight: 1.3 }}>annual income</div>
+                          <div style={{ fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2, marginTop: '2px' }}>{fmt(income)}</div>
+                          <div style={{ fontSize: '12.5px', color: '#C4BDB8', marginTop: '2px' }}>({fmt(mo_inc)} / month gross)</div>
+                        </>)}
+                        {tooltip.which === 'limit' && (<>
+                          <div style={{ fontSize: '12px', fontWeight: 400, color: '#C9A87A', lineHeight: 1.3 }}>affordability limit · 28% rule</div>
+                          <div style={{ fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2, marginTop: '2px' }}>{fmt(afford)} / month</div>
+                          <div style={{ fontSize: '12.5px', color: '#C4BDB8', marginTop: '2px' }}>maximum monthly housing cost</div>
+                        </>)}
+                        {tooltip.which === 'mortgage' && (<>
+                          <div style={{ fontSize: '12px', fontWeight: 400, color: '#C9A87A', lineHeight: 1.3 }}>monthly mortgage</div>
+                          <div style={{ fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2, marginTop: '2px' }}>{fmt(mo_mtg)} / month</div>
+                          <div style={{ fontSize: '12.5px', color: '#C4BDB8', marginTop: '2px' }}>30-yr fixed · median Boston home</div>
+                          <div style={{ fontSize: '12.5px', color: over ? '#F5C4B3' : '#9FE1CB', marginTop: '3px' }}>
+                            {over ? 'not affordable for this income' : 'affordable for this income'}
+                          </div>
+                          {over && (
+                            <div style={{ fontSize: '12.5px', color: '#C4BDB8', marginTop: '2px' }}>
+                              need {fmt(gap_yr_rounded)} more/yr to qualify
+                            </div>
+                          )}
+                        </>)}
+                        {tooltip.which === 'extension' && (<>
+                          <div style={{ fontSize: '12px', fontWeight: 400, color: '#C9A87A', lineHeight: 1.3 }}>out of reach</div>
+                          <div style={{ fontSize: '18px', fontWeight: 700, color: '#F7F6F3', lineHeight: 1.2, marginTop: '2px' }}>+{fmt(gap_mo)} / month</div>
+                          <div style={{ fontSize: '12.5px', color: '#C4BDB8', marginTop: '2px' }}>additional income needed to qualify</div>
+                          <div style={{ fontSize: '12.5px', color: '#C4BDB8', marginTop: '2px' }}>
+                            {extMultiplier}× {extOccLabel} required · {fmt(needed_yr)}/yr
+                          </div>
+                        </>)}
+                        {/* Caret */}
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '-6px',
+                          left: `${caretLeft}px`,
+                          width: 0, height: 0,
+                          borderLeft: '6px solid transparent',
+                          borderRight: '6px solid transparent',
+                          borderTop: '6px solid #1C1916',
+                        }} />
+                      </div>
+                    );
+                  })()}
+
+                  {/* The bar itself — 32px tall, listens for touch */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'stretch',
+                      height: '32px',
+                      position: 'relative',
+                      touchAction: 'none',
+                      cursor: 'pointer',
+                    }}
+                    onTouchStart={handleTouch}
+                    onTouchMove={handleTouch}
+                    onMouseDown={(e) => {
+                      // Mouse fallback for DevTools mobile emulation without Touch
+                      if (!mobileBarRef.current) return;
+                      const rect = mobileBarRef.current.getBoundingClientRect();
+                      const seg = segmentAt(e.clientX - rect.left);
+                      setTooltip({ ...seg, mobile: true });
+                    }}
+                  >
+                    {/* Income bar */}
+                    <div style={{
+                      width: `${iW_m}px`,
+                      background: '#EDE9E3',
+                      border: '1px solid #E2DDD6',
+                      borderRight: hasExt ? 'none' : '2px solid #6B6560',
+                      borderRadius: hasExt ? '4px 0 0 4px' : '4px',
+                      position: 'relative',
+                      flexShrink: 0,
+                    }}>
+                      {/* 28% limit stripe */}
+                      <div style={{
+                        position: 'absolute',
+                        top: 0, left: 0, bottom: 0,
+                        width: '28%',
+                        background: 'repeating-linear-gradient(-45deg, rgba(59,107,138,0.18) 0px, rgba(59,107,138,0.18) 2px, transparent 2px, transparent 6px)',
+                        borderRight: '1.5px dashed rgba(59,107,138,0.45)',
+                        borderRadius: '4px 0 0 4px',
+                      }} />
+                      {/* Red over-limit shading */}
+                      {over && (
+                        <div style={{
+                          position: 'absolute',
+                          top: 0, bottom: 0,
+                          left: '28%',
+                          width: `${redW}%`,
+                          background: 'rgba(139,74,74,0.20)',
+                        }} />
+                      )}
+                      {/* Mortgage marker — thicker on mobile */}
+                      {over && (
+                        <div style={{
+                          position: 'absolute',
+                          top: '-5px', bottom: '-5px',
+                          left: `calc(${Math.min(mtgPctNum, 99.5)}% - 1.25px)`,
+                          width: '2.5px',
+                          background: 'rgba(139,74,74,0.85)',
+                          borderRadius: '1.25px',
+                          pointerEvents: 'none',
+                        }} />
+                      )}
+                    </div>
+                    {hasExt && (
+                      <div style={{
+                        width: `${extW_m}px`,
+                        background: 'rgba(180,120,40,0.14)',
+                        border: '1.5px dashed rgba(180,120,40,0.55)',
+                        borderLeft: 'none',
+                        borderRadius: '0 4px 4px 0',
+                        flexShrink: 0,
+                        position: 'relative',
+                        overflow: 'hidden',
+                      }}>
+                        {extLong && (
+                          <span style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '8px',
+                            transform: 'translateY(-50%)',
+                            fontSize: '11px',
+                            fontWeight: 500,
+                            color: 'rgba(160,100,20,0.85)',
+                            whiteSpace: 'nowrap',
+                            pointerEvents: 'none',
+                          }}>{extLabelText}</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <p style={{
+                  fontSize: '12px',
+                  color: '#A09C97',
+                  fontStyle: 'italic',
+                  margin: '12px 0 0',
+                  textAlign: 'center',
+                }}>
+                  Tap or drag along the bar to see what each segment means
+                </p>
+
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'auto auto',
+                  columnGap: '16px',
+                  rowGap: '6px',
+                  marginTop: '20px',
+                  fontSize: '14px',
+                  lineHeight: 1.4,
+                }}>
+                  <span style={{ color: '#6B6560' }}>Income: ${Math.round(income / 1000)}K / yr ({fmt(mo_inc)}/mo)</span>
+                  <span style={{ color: 'rgba(59,107,138,0.75)' }}>Limit: {fmt(afford)}/mo</span>
+                  {over && <span style={{ color: '#8B4A4A' }}>+{fmt(mo_mtg - afford)} over limit</span>}
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Persona picker entry is rendered as a sticky dock at viewport bottom — see end of branch */}
         </div>
 
         {/* Source row */}
@@ -1302,143 +1440,242 @@ export default function AffordabilityChart() {
           Sources: Redfin Data Center (2012–2024); PropertyShark/MAR (2005–2011) · U.S. Census ACS 1-year, B19013 · Freddie Mac PMMS 30-yr fixed · 20% down assumed
         </p>
 
-        {/* Bottom sheet */}
-        {sidebarOpen && (
-          <>
-            <div
-              onClick={() => setSidebarOpen(false)}
+        {/* ── Sticky bottom persona-picker dock ── */}
+        {dockVisible && (() => {
+          const dockTier = hhLens ? 'median' : occ.tier;
+          const dockColor = TIER_COLORS[dockTier] || '#3B6B8A';
+          return (
+            <button
+              onClick={() => setSidebarOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={sidebarOpen}
+              aria-label={`Choose persona — currently ${stageLabel}`}
               style={{
                 position: 'fixed',
-                inset: 0,
-                background: 'rgba(0,0,0,0.4)',
-                backdropFilter: 'blur(2px)',
-                WebkitBackdropFilter: 'blur(2px)',
-                zIndex: 1000,
-              }}
-            />
-            <div
-              role="dialog"
-              aria-label="Choose a persona or household"
-              style={{
-                position: 'fixed',
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: '#FAFAF8',
-                borderTopLeftRadius: '14px',
-                borderTopRightRadius: '14px',
-                padding: '12px 18px 24px',
-                zIndex: 1001,
-                maxHeight: '85vh',
-                overflowY: 'auto',
-                boxShadow: '0 -8px 32px rgba(0,0,0,0.2)',
+                left: '12px',
+                right: '12px',
+                bottom: 'calc(12px + env(safe-area-inset-bottom))',
+                zIndex: 100,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                background: '#FFFFFF',
+                border: '1px solid #E2DDD6',
+                borderRadius: '14px',
+                padding: '10px 14px 10px 10px',
+                boxShadow: '0 6px 20px rgba(28,25,22,0.10), 0 2px 6px rgba(28,25,22,0.06)',
                 fontFamily: "'Lato', sans-serif",
+                textAlign: 'left',
+                cursor: 'pointer',
+                WebkitTapHighlightColor: 'transparent',
               }}
             >
-              <div style={{
+              {/* Avatar circle — tier-colored */}
+              <span style={{
                 width: '36px',
-                height: '4px',
-                borderRadius: '2px',
-                background: '#E2DDD6',
-                margin: '4px auto 16px',
-              }} />
-              <div style={{
-                fontSize: '14px',
-                letterSpacing: '0.13em',
-                textTransform: 'uppercase',
-                color: '#A09C97',
-                marginBottom: '12px',
-              }}>What if you were a...</div>
+                height: '36px',
+                borderRadius: '50%',
+                background: dockColor,
+                color: '#FFFFFF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '18px',
+                fontWeight: 700,
+                lineHeight: 1,
+                flexShrink: 0,
+              }} aria-hidden="true">?</span>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <button style={{ ...pillStyle('median'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('median'); setSelectedHHSize(null); }}>
-                  <span style={{ ...S.pillDot, background: '#3B6B8A' }} />Average Bostonian
-                </button>
-                <div style={S.sidebarDivider} />
-                <button style={{ ...pillStyle('home_health'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('home_health'); setSelectedHHSize(null); }}>
-                  <span style={{ ...S.pillDot, background: '#8B4A4A' }} />Home health aide
-                </button>
-                <button style={{ ...pillStyle('childcare'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('childcare'); setSelectedHHSize(null); }}>
-                  <span style={{ ...S.pillDot, background: '#8B4A4A' }} />Childcare worker
-                </button>
-                <button style={{ ...pillStyle('restaurant'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('restaurant'); setSelectedHHSize(null); }}>
-                  <span style={{ ...S.pillDot, background: '#8B4A4A' }} />Restaurant worker
-                </button>
-                <div style={S.sidebarDivider} />
-                <button style={{ ...pillStyle('teacher'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('teacher'); setSelectedHHSize(null); }}>
-                  <span style={{ ...S.pillDot, background: '#b87c20' }} />Teacher
-                </button>
-                <button style={{ ...pillStyle('transit'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('transit'); setSelectedHHSize(null); }}>
-                  <span style={{ ...S.pillDot, background: '#b87c20' }} />Transit driver
-                </button>
-                <button style={{ ...pillStyle('firefighter'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('firefighter'); setSelectedHHSize(null); }}>
-                  <span style={{ ...S.pillDot, background: '#b87c20' }} />Firefighter
-                </button>
-                <button style={{ ...pillStyle('nurse'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('nurse'); setSelectedHHSize(null); }}>
-                  <span style={{ ...S.pillDot, background: '#b87c20' }} />Registered nurse
-                </button>
-                <div style={S.sidebarDivider} />
-                <button style={{ ...pillStyle('software_dev'), padding: '10px 8px' }} onClick={() => { setSelectedOccupation('software_dev'); setSelectedHHSize(null); }}>
-                  <span style={{ ...S.pillDot, background: '#3b7a3b' }} />Software developer
-                </button>
+              {/* Text block */}
+              <span style={{
+                flex: 1,
+                minWidth: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '2px',
+              }}>
+                <span style={{
+                  fontSize: '10px',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: '#A09C97',
+                  fontWeight: 500,
+                  lineHeight: 1,
+                }}>What if you were…</span>
+                <span style={{
+                  fontSize: '15px',
+                  fontWeight: 700,
+                  color: '#1C1916',
+                  lineHeight: 1.2,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}>{stageLabel}</span>
+              </span>
 
-                <div style={S.sidebarDivider} />
-                <div style={{ ...S.sidebarEyebrow, marginTop: '10px' }}>or by household size</div>
-                {householdSizeOptions.map(opt => (
+              {/* Down chevron */}
+              <span style={{
+                fontSize: '10px',
+                color: '#6B6560',
+                flexShrink: 0,
+                lineHeight: 1,
+                marginLeft: '2px',
+              }} aria-hidden="true">▼</span>
+            </button>
+          );
+        })()}
+
+        {/* ── Persona bottom-sheet modal ── */}
+        {sidebarOpen && (() => {
+          const isOccSelected = (k) => !hhLens && selectedOccupation === k;
+          const isHHSelected  = (id) => selectedHHSize === id;
+          const occPill = (k, label, dotColor) => {
+            const sel = isOccSelected(k);
+            return (
+              <button
+                key={k}
+                style={{ ...pillStyle(k), padding: '12px 10px' }}
+                onClick={() => { setSelectedOccupation(k); setSelectedHHSize(null); }}
+                role="option"
+                aria-selected={sel}
+              >
+                <span style={{ ...S.pillDot, background: dotColor }} />
+                <span style={{ flex: 1, textAlign: 'left' }}>{label}</span>
+                {sel && (
+                  <span style={{ marginLeft: 'auto', fontSize: '15px', fontWeight: 600, lineHeight: 1 }} aria-hidden="true">✓</span>
+                )}
+              </button>
+            );
+          };
+          const hhPill = (opt) => {
+            const sel = isHHSelected(opt.id);
+            return (
+              <button
+                key={opt.id}
+                style={{ ...hhSizePillStyle(opt.id), padding: '12px 10px' }}
+                onClick={() => setSelectedHHSize(opt.id)}
+                role="option"
+                aria-selected={sel}
+              >
+                <span style={{ ...S.pillDot, background: '#3B6B8A' }} />
+                <span style={{ flex: 1, textAlign: 'left' }}>{opt.label}</span>
+                {sel && (
+                  <span style={{ marginLeft: 'auto', fontSize: '15px', fontWeight: 600, lineHeight: 1 }} aria-hidden="true">✓</span>
+                )}
+              </button>
+            );
+          };
+
+          return (
+            <>
+              <div
+                onClick={() => setSidebarOpen(false)}
+                style={{
+                  position: 'fixed',
+                  inset: 0,
+                  background: 'rgba(0,0,0,0.4)',
+                  backdropFilter: 'blur(2px)',
+                  WebkitBackdropFilter: 'blur(2px)',
+                  zIndex: 1000,
+                }}
+              />
+              <div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="persona-sheet-title"
+                style={{
+                  position: 'fixed',
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: '#FAFAF8',
+                  borderTopLeftRadius: '16px',
+                  borderTopRightRadius: '16px',
+                  padding: '10px 0 calc(12px + env(safe-area-inset-bottom))',
+                  zIndex: 1001,
+                  maxHeight: '88vh',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  boxShadow: '0 -8px 32px rgba(0,0,0,0.2)',
+                  fontFamily: "'Lato', sans-serif",
+                }}
+              >
+                {/* Drag handle */}
+                <div style={{
+                  width: '36px',
+                  height: '4px',
+                  borderRadius: '2px',
+                  background: '#E2DDD6',
+                  margin: '4px auto 12px',
+                  flexShrink: 0,
+                }} />
+
+                {/* Header with title + close */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0 18px 12px',
+                  borderBottom: '1px solid #E2DDD6',
+                  flexShrink: 0,
+                }}>
+                  <div id="persona-sheet-title" style={{
+                    fontFamily: "'Lato', sans-serif",
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    color: '#1C1916',
+                  }}>What if you were…</div>
                   <button
-                    key={opt.id}
-                    style={{ ...hhSizePillStyle(opt.id), padding: '10px 8px' }}
-                    onClick={() => setSelectedHHSize(opt.id)}
-                  >
-                    <span style={{ ...S.pillDot, background: '#3B6B8A' }} />
-                    {opt.label}
-                  </button>
-                ))}
-                <div style={{ ...S.hhCallout, marginTop: '8px' }}>
-                  Home price based on a bedroom-appropriate size for your household.
+                    onClick={() => setSidebarOpen(false)}
+                    aria-label="Close"
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      fontSize: '24px',
+                      lineHeight: 1,
+                      color: '#6B6560',
+                      cursor: 'pointer',
+                      padding: '4px 8px',
+                      WebkitTapHighlightColor: 'transparent',
+                    }}
+                  >×</button>
+                </div>
+
+                {/* Scrollable options */}
+                <div role="listbox" style={{
+                  overflowY: 'auto',
+                  WebkitOverflowScrolling: 'touch',
+                  padding: '12px 18px 8px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '4px',
+                  flex: 1,
+                  minHeight: 0,
+                }}>
+                  {occPill('median', 'Average Bostonian', '#3B6B8A')}
+                  <div style={S.sidebarDivider} />
+                  {occPill('home_health', 'Home health aide',   '#8B4A4A')}
+                  {occPill('childcare',   'Childcare worker',   '#8B4A4A')}
+                  {occPill('restaurant',  'Restaurant worker',  '#8B4A4A')}
+                  <div style={S.sidebarDivider} />
+                  {occPill('teacher',     'Teacher',            '#b87c20')}
+                  {occPill('transit',     'Transit driver',     '#b87c20')}
+                  {occPill('firefighter', 'Firefighter',        '#b87c20')}
+                  {occPill('nurse',       'Registered nurse',   '#b87c20')}
+                  <div style={S.sidebarDivider} />
+                  {occPill('software_dev', 'Software developer', '#3b7a3b')}
+
+                  <div style={S.sidebarDivider} />
+                  <div style={{ ...S.sidebarEyebrow, marginTop: '10px' }}>or by household size</div>
+                  {householdSizeOptions.map(hhPill)}
+                  <div style={{ ...S.hhCallout, marginTop: '8px' }}>
+                    Home price based on a bedroom-appropriate size for your household.
+                  </div>
                 </div>
               </div>
-
-              <div style={{
-                display: 'flex',
-                gap: '8px',
-                justifyContent: 'center',
-                marginTop: '16px',
-                paddingTop: '16px',
-                borderTop: '1px solid #E2DDD6',
-              }}>
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  style={{
-                    background: '#3B6B8A',
-                    border: '1px solid #E2DDD6',
-                    color: '#F7F6F3',
-                    padding: '8px 18px',
-                    borderRadius: '4px',
-                    fontSize: '14px',
-                    letterSpacing: '0.05em',
-                    cursor: 'pointer',
-                    fontFamily: "'Lato', sans-serif",
-                  }}
-                >Submit</button>
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  style={{
-                    background: 'transparent',
-                    border: '1px solid #E2DDD6',
-                    color: '#6B6560',
-                    padding: '8px 18px',
-                    borderRadius: '4px',
-                    fontSize: '14px',
-                    letterSpacing: '0.05em',
-                    cursor: 'pointer',
-                    fontFamily: "'Lato', sans-serif",
-                  }}
-                >‹ Close</button>
-              </div>
-            </div>
-          </>
-        )}
+            </>
+          );
+        })()}
       </div>
     );
   }

@@ -310,10 +310,10 @@ export default function App() {
       {/* ── Authors + Sources ── */}
       <div style={{ borderTop: '1px solid var(--border)', marginTop: '64px' }} />
       <footer style={{
-        paddingTop: '32px',
-        paddingBottom: '64px',
+        padding: '32px 20px 64px',
         maxWidth: '720px',
         margin: '0 auto',
+        boxSizing: 'border-box',
       }}>
 
         {/* Authors */}
