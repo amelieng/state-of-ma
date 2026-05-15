@@ -26,7 +26,16 @@
       "mcp__figma-remote-mcp__generate_figma_design",
       "Bash(cmd *)",
       "mcp__figma-remote-mcp__get_screenshot",
-      "mcp__figma-remote-mcp__get_design_context"
+      "mcp__figma-remote-mcp__get_design_context",
+      "WebFetch(domain:housing-truths.netlify.app)",
+      "Bash(curl -sk https://housing-truths.netlify.app/)",
+      "Bash(git fetch *)",
+      "Bash(git -C \"C:\\\\Users\\\\Vanilla\\\\Downloads\\\\State-of-ma\\\\state-of-ma\" status)",
+      "Bash(git -C \"C:\\\\Users\\\\Vanilla\\\\Downloads\\\\State-of-ma\\\\state-of-ma\" log --oneline -10)",
+      "Bash(curl -sk https://housing-truths.netlify.app/assets/index-Dd64PSjI.js -o C:\\\\Users\\\\Vanilla\\\\Downloads\\\\State-of-ma\\\\state-of-ma\\\\.tmp-deployed.js)",
+      "Bash(powershell -c \"\\(Get-Item C:\\\\Users\\\\Vanilla\\\\Downloads\\\\State-of-ma\\\\state-of-ma\\\\.tmp-deployed.js\\).Length\")",
+      "Bash(curl -skL \"https://housing-truths.netlify.app/assets/index-Dd64PSjI.js\" -o \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.js\")",
+      "Bash(curl -skL \"https://housing-truths.netlify.app/assets/index-CVBn4klv.css\" -o \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.css\")"
     ]
   }
 }

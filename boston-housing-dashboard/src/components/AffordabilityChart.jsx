@@ -118,19 +118,24 @@ function houseScale(pct) {
 function lerp(a, b, t) { return a + (b - a) * t; }
 function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
 
+// Mobile = narrow viewport OR touch-only device. Catches iPhones in landscape
+// and "Request Desktop Site" mode, where the CSS viewport is wider than 600px
+// but the device is still hand-held and the desktop layout is unusable.
+const MOBILE_MQ = '(max-width: 600px), (hover: none) and (pointer: coarse)';
+
 // ── Component ─────────────────────────────────────────────────
 export default function AffordabilityChart() {
   const [selectedYear, setSelectedYear] = useState(2024);
   const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== 'undefined' && window.matchMedia('(max-width: 600px)').matches
+    typeof window !== 'undefined' && window.matchMedia(MOBILE_MQ).matches
   );
   const [sidebarOpen, setSidebarOpen]   = useState(() =>
-    !(typeof window !== 'undefined' && window.matchMedia('(max-width: 600px)').matches)
+    !(typeof window !== 'undefined' && window.matchMedia(MOBILE_MQ).matches)
   );
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const mq = window.matchMedia('(max-width: 600px)');
+    const mq = window.matchMedia(MOBILE_MQ);
     const handler = (e) => {
       setIsMobile(e.matches);
       setSidebarOpen(!e.matches);

@@ -960,7 +960,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
 }
 
 /* ── Mobile ── */
-@media (max-width: 600px) {
+@media (max-width: 600px), (hover: none) and (pointer: coarse) {
   .ftb-wrap {
     padding: 40px 20px 32px;
   }
@@ -1467,7 +1467,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
 }
 
 /* ── Mobile ── */
-@media (max-width: 560px) {
+@media (max-width: 560px), (hover: none) and (pointer: coarse) {
   .conc-fork {
     display: flex;
     flex-direction: column;
@@ -1485,7 +1485,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 600px), (hover: none) and (pointer: coarse) {
   .conc-wrap {
     padding: 40px 20px 64px;
   }
@@ -1509,7 +1509,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
 /* ══════════════════════════════════════════════════════════════════════════════
    Supply vs Need section  (.sg-*)
 ══════════════════════════════════════════════════════════════════════════════ */
-@media (max-width: 600px) {
+@media (max-width: 600px), (hover: none) and (pointer: coarse) {
   .sg-wrap {
     padding: 40px 16px 40px !important;
   }
