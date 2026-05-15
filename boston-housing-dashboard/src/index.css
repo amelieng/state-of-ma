@@ -1580,18 +1580,31 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
     font-size: 16px !important;
     line-height: 1.6 !important;
   }
+  /* Stat cards: 3-up horizontal row that fills the viewport width.
+     Big stat font and padding scaled down so values like "19 of 23"
+     fit inside a ~110px card without wrapping. */
   .sg-stats {
-    flex-direction: column !important;
-    gap: 10px !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
     width: 100% !important;
   }
   .sg-stats > div {
-    flex: 1 1 auto !important;
-    padding: 14px 16px !important;
-    width: 100% !important;
+    flex: 1 1 0 !important;
+    padding: 12px 10px !important;
+    width: auto !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
     min-width: 0 !important;
+  }
+  .sg-stats > div > div:first-child {
+    font-size: 18px !important;
+    line-height: 1.15 !important;
+    margin-bottom: 6px !important;
+  }
+  .sg-stats > div > div:nth-child(2) {
+    font-size: 11.5px !important;
+    line-height: 1.35 !important;
   }
   .sg-chart-card {
     padding: 20px 8px 8px !important;

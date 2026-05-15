@@ -961,6 +961,39 @@ export default function AffordabilityChart() {
         fontFamily: "'Lato', sans-serif",
         color: '#1C1916',
       }}>
+        {/* Page header */}
+        <div style={{ padding: '16px 12px 20px' }}>
+          <p style={{
+            fontFamily: "'Lato', sans-serif",
+            fontSize: '13px',
+            fontWeight: 400,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'var(--text-muted)',
+            marginBottom: '10px',
+          }}>The price of staying in Boston</p>
+          <h2 style={{
+            fontFamily: 'var(--font-heading)',
+            fontSize: '24px',
+            fontWeight: 700,
+            letterSpacing: '-0.3px',
+            lineHeight: 1.2,
+            color: 'var(--text-primary)',
+            marginBottom: '10px',
+          }}>
+            The average Boston salary can no longer afford the average Boston home.
+          </h2>
+          <p style={{
+            fontFamily: "'Lato', sans-serif",
+            fontSize: '15px',
+            color: '#6B6460',
+            lineHeight: 1.55,
+            margin: 0,
+          }}>
+            Select an occupation or household size below to see how close or far homeownership really is.
+          </p>
+        </div>
+
         <div style={{
           background: '#FFFFFF',
           borderRadius: '10px',

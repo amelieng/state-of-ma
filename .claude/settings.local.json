@@ -46,7 +46,19 @@
       "Bash(grep -oE \"fontSize:'26px'\\\\\\\\|fontSize:'14px'\\\\\\\\|labelStyle\" \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.js\")",
       "Bash(curl -skL \"https://housingtruths.org/\")",
       "Bash(curl -skL \"https://housing-truths.netlify.app/\")",
-      "Bash(curl -skvL \"https://housingtruths.org/\")"
+      "Bash(curl -skvL \"https://housingtruths.org/\")",
+      "Bash(curl -sk \"https://housing-truths.netlify.app/assets/index-Dp-b5Gzh.js\" -o \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.js\")",
+      "Bash(grep -oE \"service_[a-z0-9]{8,}|template_[a-z0-9]{8,}|[A-Za-z0-9_-]{15,25}.{0,3}EMAILJS\" \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.js\")",
+      "Bash(grep -oE \"service_[a-z0-9]{6,}\" \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.js\")",
+      "Bash(grep -oE \"service_[a-z0-9]{6,}\" \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/boston-housing-dashboard/dist/assets/index-B5i8MNWi.js\")",
+      "Bash(grep -oE \"emailjs.{1,50}send\" \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.js\")",
+      "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" ls-files boston-housing-dashboard/.env)",
+      "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" show HEAD:boston-housing-dashboard/.env)",
+      "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" diff HEAD -- boston-housing-dashboard/.env)",
+      "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" ls-files boston-housing-dashboard/.env -s)",
+      "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" status boston-housing-dashboard/.env)",
+      "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" log --all --oneline -- boston-housing-dashboard/.env)",
+      "Bash(curl -sk \"https://housing-truths.netlify.app/assets/index-BTmTp9B6.js\" -o \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.js\")"
     ]
   }
 }
