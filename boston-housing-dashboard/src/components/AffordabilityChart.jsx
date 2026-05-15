@@ -919,7 +919,7 @@ export default function AffordabilityChart() {
 
     const labelStyle = {
       fontFamily: "'Lato', sans-serif",
-      fontSize: '13px',
+      fontSize: '14px',
       textTransform: 'uppercase',
       letterSpacing: '0.07em',
       color: '#A09C97',
@@ -928,7 +928,7 @@ export default function AffordabilityChart() {
     };
     const valStyle = (red) => ({
       fontFamily: "'Lato', sans-serif",
-      fontSize: '24px',
+      fontSize: '26px',
       fontWeight: 700,
       lineHeight: 1.1,
       color: red ? '#8B4A4A' : '#1C1916',
@@ -940,7 +940,7 @@ export default function AffordabilityChart() {
       padding: '9px 16px',
       color: '#F7F6F3',
       fontFamily: "'Lato', sans-serif",
-      fontSize: '15px',
+      fontSize: '16px',
       fontWeight: 600,
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.35 : 1,
@@ -1001,13 +1001,13 @@ export default function AffordabilityChart() {
                   : 'Least affordable year on record'}
               </div>
             )}
-            <p style={{ fontSize: '15px', lineHeight: 1.65, margin: 0, color: '#1C1916' }}>
+            <p style={{ fontSize: '16px', lineHeight: 1.65, margin: 0, color: '#1C1916' }}>
               {over
                 ? `In ${selectedYear}, ${stageShort} would spend ${pctVal}% of monthly income on a mortgage — ${fmt(mo_mtg - afford)}/month above the affordability limit.`
                 : `In ${selectedYear}, ${stageShort} would spend ${pctVal}% of monthly income on a mortgage — within reach of the 28% affordability threshold.`}
             </p>
             {note && (
-              <p style={{ fontSize: '15px', lineHeight: 1.65, margin: 0, color: '#6B6560' }}>{note}</p>
+              <p style={{ fontSize: '16px', lineHeight: 1.65, margin: 0, color: '#6B6560' }}>{note}</p>
             )}
           </div>
 
@@ -1100,7 +1100,7 @@ export default function AffordabilityChart() {
           {/* Affordability ruler */}
           <div>
             <p style={{
-              fontSize: '11px',
+              fontSize: '12px',
               fontWeight: 400,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
@@ -1114,7 +1114,7 @@ export default function AffordabilityChart() {
               columnGap: '12px',
               rowGap: '4px',
               marginBottom: '24px',
-              fontSize: '13px',
+              fontSize: '14px',
               color: '#A09C97',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -1206,7 +1206,7 @@ export default function AffordabilityChart() {
               columnGap: '16px',
               rowGap: '4px',
               marginTop: '16px',
-              fontSize: '13px',
+              fontSize: '14px',
               lineHeight: 1.4,
             }}>
               <span style={{ color: '#6B6560' }}>Income: ${Math.round(income / 1000)}K / yr ({fmt(mo_inc)}/mo)</span>
@@ -1250,7 +1250,7 @@ export default function AffordabilityChart() {
               flexShrink: 0,
             }}>?</span>
             <span style={{
-              fontSize: '13px',
+              fontSize: '14px',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               color: '#A09C97',
@@ -1262,7 +1262,7 @@ export default function AffordabilityChart() {
         <p className="ftb-source" style={{
           marginTop: '12px',
           padding: '0 8px',
-          fontSize: '11px',
+          fontSize: '12px',
           color: '#A09C97',
           lineHeight: 1.5,
         }}>
@@ -1310,7 +1310,7 @@ export default function AffordabilityChart() {
                 margin: '4px auto 16px',
               }} />
               <div style={{
-                fontSize: '13px',
+                fontSize: '14px',
                 letterSpacing: '0.13em',
                 textTransform: 'uppercase',
                 color: '#A09C97',
@@ -1382,7 +1382,7 @@ export default function AffordabilityChart() {
                     color: '#F7F6F3',
                     padding: '8px 18px',
                     borderRadius: '4px',
-                    fontSize: '13px',
+                    fontSize: '14px',
                     letterSpacing: '0.05em',
                     cursor: 'pointer',
                     fontFamily: "'Lato', sans-serif",
@@ -1396,7 +1396,7 @@ export default function AffordabilityChart() {
                     color: '#6B6560',
                     padding: '8px 18px',
                     borderRadius: '4px',
-                    fontSize: '13px',
+                    fontSize: '14px',
                     letterSpacing: '0.05em',
                     cursor: 'pointer',
                     fontFamily: "'Lato', sans-serif",

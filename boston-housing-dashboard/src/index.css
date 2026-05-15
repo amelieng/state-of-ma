@@ -46,6 +46,17 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   font-family: var(--font-body);
   background: var(--bg);
@@ -768,6 +779,23 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
   flex-shrink: 0;
 }
 
+/* ── RenterGuess mobile ── */
+@media (max-width: 600px), (hover: none) and (pointer: coarse) {
+  .renter-guess {
+    padding: 56px 20px;
+  }
+  .rg-subtext         { font-size: 15px; }
+  .rg-reveal-sub      { font-size: 15px; }
+  .rg-reveal-quote    { font-size: 15px; }
+  .rg-counter-label   { font-size: 14px; }
+  .rg-building-label  { font-size: 14px; }
+  .rg-compare-pcts    { font-size: 14px; }
+  .rg-source          { font-size: 13px; }
+  .rg-guess-label     { font-size: 14px; }
+  .rg-legend-item     { font-size: 14px; }
+  .rg-compare-name    { font-size: 13px; }
+}
+
 /* ══════════════════════════════════════════════════════════════════════════════
    First-Time Buyer section  (.ftb-*)
 ══════════════════════════════════════════════════════════════════════════════ */
@@ -986,6 +1014,10 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
   .ftb-portrait-card {
     flex: 1 1 130px;
   }
+
+  .ftb-subhead { font-size: 17px; }
+  .ftb-p-body  { font-size: 14.5px; }
+  .ftb-source  { font-size: 13px; }
 
   .ftb-p-stat {
     font-size: 22px;
@@ -1504,6 +1536,20 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
   .conc-compare-cards {
     gap: 24px;
   }
+
+  /* Body-text sizes for mobile readability */
+  .conc-body           { font-size: 17px; }
+  .conc-fork-body      { font-size: 14.5px; }
+  .conc-step-body      { font-size: 14.5px; }
+  .conc-step-title     { font-size: 14.5px; }
+  .conc-callout        { font-size: 14px; }
+  .conc-check          { font-size: 14px; }
+  .conc-map-card-desc  { font-size: 14.5px; }
+  .conc-map-row-val    { font-size: 14px; }
+  .conc-map-fact       { font-size: 14.5px; }
+  .conc-compare-fact   { font-size: 14.5px; }
+  .conc-closing-prose  { font-size: 16px; }
+  .conc-asymmetry      { font-size: 15px; }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
@@ -1518,7 +1564,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
     line-height: 1.25 !important;
   }
   .sg-subhead {
-    font-size: 15px !important;
+    font-size: 16px !important;
     line-height: 1.6 !important;
   }
   .sg-stats {
