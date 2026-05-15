@@ -1591,9 +1591,36 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
     min-width: 0 !important;
     overflow: hidden;
   }
+  /* Legend: stack items vertically so the long "True need..." label
+     gets its own line and never overflows the card. */
   .sg-chart-card > div:first-child {
-    gap: 14px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
     margin-bottom: 14px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .sg-chart-card > div:first-child > div {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .sg-chart-card > div:first-child > div > span {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    min-width: 0;
+  }
+  /* Chart canvas: force the Chart.js canvas to never exceed its container.
+     Chart.js initialises responsive sizing on the first render, but on iOS
+     it can lock to a wider width before our CSS constraints apply. */
+  .sg-chart-card > div:last-child {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+  .sg-chart-card canvas {
+    max-width: 100% !important;
+    width: 100% !important;
   }
   .sg-table-card {
     padding: 16px 14px !important;

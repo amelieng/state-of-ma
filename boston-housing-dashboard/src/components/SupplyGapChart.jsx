@@ -69,7 +69,7 @@ export default function SupplyGapChart() {
       if (!canvas) return
       const existing = Chart.getChart(canvas)
       if (existing) existing.destroy()
-      chartRef.current = new Chart(canvas, {
+      const chart = new Chart(canvas, {
         type: 'line',
         data: {
           labels: YEARS,
@@ -139,6 +139,8 @@ export default function SupplyGapChart() {
                 font: { family: 'Lato', size: 11, weight: '400' },
                 color: '#6B6560',
                 maxRotation: 45,
+                autoSkip: true,
+                autoSkipPadding: 8,
               },
             },
             y: {
@@ -162,6 +164,12 @@ export default function SupplyGapChart() {
           },
         },
       })
+      chartRef.current = chart
+      // Force a re-measure after the layout settles. Chart.js can lock onto
+      // the container's initial width before mobile CSS constraints apply
+      // (especially on iOS), leaving the canvas wider than its card.
+      requestAnimationFrame(() => chart.resize())
+      setTimeout(() => chart.resize(), 100)
     }
 
     if (window.Chart) {
