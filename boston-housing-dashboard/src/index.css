@@ -1184,7 +1184,10 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
   transition: max-height 0.4s ease;
 }
 .conc-drawer--open {
-  max-height: 1000px;
+  /* Generous ceiling so larger mobile typography never clips the drawer's
+     bottom padding. Visible expansion still completes quickly because the
+     transition resolves at min(actual content height, max-height). */
+  max-height: 3000px;
 }
 
 .conc-drawer-inner {
