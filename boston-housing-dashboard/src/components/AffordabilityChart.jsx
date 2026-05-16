@@ -1073,30 +1073,45 @@ export default function AffordabilityChart() {
             )}
           </div>
 
-          {/* 2×2 metrics */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            columnGap: '24px',
-            rowGap: '16px',
-          }}>
-            <div>
-              <div style={labelStyle}>Monthly mortgage payment</div>
-              <div style={valStyle(over)}>{fmt(mo_mtg)}</div>
-            </div>
-            <div>
-              <div style={labelStyle}>Annual income needed to qualify</div>
-              <div style={valStyle(over)}>{fmt(needed_yr)}</div>
-            </div>
-            <div>
-              <div style={labelStyle}>Left over each month</div>
-              <div style={valStyle(leftover < 0)}>{fmt(leftover)}</div>
-            </div>
-            <div>
-              <div style={labelStyle}>Mortgage rate</div>
-              <div style={valStyle(false)}>{rawYear.rate}%</div>
-            </div>
-          </div>
+          {/* 2×2 metrics — each stat in its own off-white card */}
+          {(() => {
+            const metricCard = {
+              background: '#F7F6F3',
+              border: '1px solid #E2DDD6',
+              borderRadius: '10px',
+              padding: '14px 14px 16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+              minWidth: 0,
+              boxSizing: 'border-box',
+            };
+            return (
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                columnGap: '12px',
+                rowGap: '12px',
+              }}>
+                <div style={metricCard}>
+                  <div style={labelStyle}>Monthly mortgage payment</div>
+                  <div style={valStyle(over)}>{fmt(mo_mtg)}</div>
+                </div>
+                <div style={metricCard}>
+                  <div style={labelStyle}>Annual income needed to qualify</div>
+                  <div style={valStyle(over)}>{fmt(needed_yr)}</div>
+                </div>
+                <div style={metricCard}>
+                  <div style={labelStyle}>Left over each month</div>
+                  <div style={valStyle(leftover < 0)}>{fmt(leftover)}</div>
+                </div>
+                <div style={metricCard}>
+                  <div style={labelStyle}>Mortgage rate</div>
+                  <div style={valStyle(false)}>{rawYear.rate}%</div>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Arrows + house */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
