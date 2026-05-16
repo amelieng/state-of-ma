@@ -178,9 +178,14 @@ export default function AffordabilityChart() {
       setDockVisible(false);
       return;
     }
+    // Hide the dock as soon as the affordability content's bottom rises above
+    // the viewport's vertical centre — `-50% 0% 0% 0%` shrinks the top of the
+    // intersection root by half a viewport. Without this the wrapper's
+    // bottom-padding zone keeps the wrapper "intersecting" deep into the next
+    // section, leaving the dock visible after the user has clearly moved on.
     const observer = new IntersectionObserver(
       ([entry]) => setDockVisible(entry.isIntersecting),
-      { threshold: 0, rootMargin: '0px 0px -10% 0px' }
+      { threshold: 0, rootMargin: '-50% 0px 0px 0px' }
     );
     observer.observe(affWrapperRef.current);
     return () => observer.disconnect();
