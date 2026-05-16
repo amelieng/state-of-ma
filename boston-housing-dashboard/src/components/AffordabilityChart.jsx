@@ -1227,7 +1227,7 @@ export default function AffordabilityChart() {
                   gridTemplateColumns: '1fr 1fr',
                   columnGap: '14px',
                   rowGap: '8px',
-                  marginBottom: '28px',
+                  marginBottom: '10px',
                   fontSize: '14px',
                   color: '#6B6560',
                 }}>
@@ -1256,7 +1256,7 @@ export default function AffordabilityChart() {
                 {/* Bar container — touch-interactive */}
                 <div
                   ref={mobileBarRef}
-                  style={{ position: 'relative', paddingTop: '54px' /* room for tooltip */ }}
+                  style={{ position: 'relative', paddingTop: '30px' /* tooltip headroom; overflow above is fine when active */ }}
                 >
 
                   {/* Mobile tooltip — appears above the bar, follows finger */}
