@@ -58,7 +58,13 @@
       "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" ls-files boston-housing-dashboard/.env -s)",
       "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" status boston-housing-dashboard/.env)",
       "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" log --all --oneline -- boston-housing-dashboard/.env)",
-      "Bash(curl -sk \"https://housing-truths.netlify.app/assets/index-BTmTp9B6.js\" -o \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.js\")"
+      "Bash(curl -sk \"https://housing-truths.netlify.app/assets/index-BTmTp9B6.js\" -o \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma/.tmp-deployed.js\")",
+      "Bash(curl -sk \"https://rdap.publicinterestregistry.org/rdap/domain/housingtruths.org\")",
+      "Bash(python -c \"import sys, json; d=json.load\\(sys.stdin\\); ents=d.get\\('entities',[]\\); [print\\('Role:', e.get\\('roles'\\), '| Handle:', e.get\\('handle'\\)\\) for e in ents]; print\\('---'\\); reg = next\\(\\(e for e in ents if 'registrar' in e.get\\('roles',[]\\)\\), None\\); print\\('REGISTRAR vcard:', reg.get\\('vcardArray'\\) if reg else 'none'\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)",
+      "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" add boston-housing-dashboard/src/components/AffordabilityChart.jsx)",
+      "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" commit -m \"Update\")",
+      "Bash(git -C \"C:/Users/Vanilla/Downloads/State-of-ma/state-of-ma\" push origin main)"
     ]
   }
 }
