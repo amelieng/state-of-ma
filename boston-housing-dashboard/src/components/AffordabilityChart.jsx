@@ -1073,13 +1073,13 @@ export default function AffordabilityChart() {
             )}
           </div>
 
-          {/* 2×2 metrics — each stat in its own off-white card */}
+          {/* 2×2 metrics — each stat in its own card, matching other stat cards on the site */}
           {(() => {
             const metricCard = {
-              background: '#F7F6F3',
-              border: '1px solid #E2DDD6',
-              borderRadius: '10px',
-              padding: '14px 14px 16px',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: '8px',
+              padding: '14px 16px',
               display: 'flex',
               flexDirection: 'column',
               gap: '6px',
